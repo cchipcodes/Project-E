@@ -24,6 +24,8 @@ export const PlayerTrait = J.defineTrait(
     "player",
     S.object({
         score: S.number({ label: "Score", defaultValue: 0, hidden: true }),
+        energy: S.number({ label: "Energy", defaultValue: 20, hidden: true}),
+        equipped: S.string({ label: "Active Ability", defaultValue: "none", hidden: true}),
     }),
     {
         name: "Player",
@@ -1139,23 +1141,13 @@ export const ChainTrait = J.defineTrait(
 
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";
 
-export const CardTrait = J.defineTrait(
+export const BlankCardTrait = J.defineTrait(
     "card",
-    S.object({
-        behavior: S.string({
-            label: "Behavior",
-            defaultValue: "blank",
-            control: "select",
-            options: [
-                { label: "Blank", value: "blank" },
-                { label: "Reverse", value: "reverse" },
-            ],
-        }),
-    }),
+    S.object({}),
     {
-        name: "Card",
+        name: "Blank Card",
         icon: "🃏",
-        description: "Turns a prop into a functional card.",
-        color: "#00bbff"
+        description: "Turns a prop into a functional Blank Card.",
+        color: "#ffffff"
     }
 )

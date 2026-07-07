@@ -1,9 +1,6 @@
 import * as J from "jamango";
-import { PlayerTrait } from "../traits";
+import { PlayerTrait, BlankCardTrait } from "../traits";
 
 export function cardLogic() {
-    const plr = J.getLocalPlayer();
-    J.onGameRender(()=> {
-        
-    })
+    const blankCard = J.getPropAsset(J.getAllWithTraits([BlankCardTrait]).findIndex[0])
 };
