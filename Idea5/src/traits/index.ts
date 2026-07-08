@@ -24,8 +24,6 @@ export const PlayerTrait = J.defineTrait(
     "player",
     S.object({
         score: S.number({ label: "Score", defaultValue: 0, hidden: true }),
-        energy: S.number({ label: "Energy", defaultValue: 20, hidden: true}),
-        equipped: S.string({ label: "Active Ability", defaultValue: "none", hidden: true}),
     }),
     {
         name: "Player",
