@@ -3,7 +3,6 @@ import "./traits";
 import { setInitialMovementSettings } from "./config";
 import { initServerSystems } from "./server/systems";
 import { initVehicleSystem } from "./shared/vehicle";
-import { HeldItemTrait } from "./traits";
 
 if (J.net.isHost) {
   initServerSystems();
