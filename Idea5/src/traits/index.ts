@@ -1138,14 +1138,3 @@ export const ChainTrait = J.defineTrait(
 );
 
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";
-
-export const BlankCardTrait = J.defineTrait(
-    "card",
-    S.object({}),
-    {
-        name: "Blank Card",
-        icon: "🃏",
-        description: "Turns a prop into a functional Blank Card.",
-        color: "#ffffff"
-    }
-)
