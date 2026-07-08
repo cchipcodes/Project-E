@@ -276,7 +276,7 @@ export function initServerSystems() {
 
 function initializePlayer(playerId: J.EntityId) {
     if (!J.getTrait(playerId, PlayerTrait)) {
-        J.setTrait(playerId, PlayerTrait, { score: 0 });
+        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
     }
 
     if (!J.getTrait(playerId, PlayerCollectablesTrait)) {
@@ -546,6 +546,7 @@ function handleCollectable(entityId: J.EntityId, playerId: J.EntityId, time: num
     const player = J.getTrait(playerId, PlayerTrait);
     J.setTrait(playerId, PlayerTrait, {
         score: (player?.score ?? 0) + trait.value,
+        health: (player?.health),
     });
 
     if (trait.sound) J.net.send(PlayLocalSoundCommand, { sound: trait.sound }, playerId);

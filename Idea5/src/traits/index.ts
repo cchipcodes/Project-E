@@ -24,6 +24,7 @@ export const PlayerTrait = J.defineTrait(
     "player",
     S.object({
         score: S.number({ label: "Score", defaultValue: 0, hidden: true }),
+        health: S.number({ label: "Health", defaultValue: 0, hidden: true}),
     }),
     {
         name: "Player",
@@ -854,6 +855,8 @@ export const ZombieTrait = J.defineTrait(
         runAnimation: animationAsset("Zombie run"),
         detectRange: S.number({ label: "Detect range", defaultValue: 28, min: 1 }),
         attackRange: S.number({ label: "Attack range", defaultValue: 2.4, min: 0.5 }),
+        maxHealth: S.number({ label: "Max Health", defaultValue: 10}),
+        health: S.number({ label: "Health", defaultValue: 10, hidden: true}),
         damageCooldownSeconds: S.number({
             label: "Attack cooldown",
             defaultValue: 1,
