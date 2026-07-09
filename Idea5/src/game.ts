@@ -4,7 +4,7 @@ import * as game from "./additionalFunctions";
 //Server Functions
 export function spawnEnemy() {
     game.wait(5)
-    console.log("This took place after 5 seconds");
+    J.sendChatMessage("This event took place after 5 seconds", "#FFFF");
 };
 
 //Client Functions
