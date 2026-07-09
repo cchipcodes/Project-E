@@ -3,7 +3,7 @@ import "./traits";
 import { setInitialMovementSettings } from "./config";
 import { initServerSystems } from "./server/systems";
 import { initVehicleSystem } from "./shared/vehicle";
-import { spawnEnemy } from "./game";
+import * as game from "./game";
 
 if (J.net.isHost) {
   initServerSystems();
@@ -12,7 +12,5 @@ if (J.net.isHost) {
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  J.onGameTick(() => {
-    spawnEnemy();
-  });
+  game.spawnEnemy(5)
 };
