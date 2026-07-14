@@ -12,5 +12,6 @@ if (J.net.isHost) {
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  game.spawnEnemy(5)
+  //game.spawnEnemy(5);
+  game.useCard("blank", 5, 10);
 };

@@ -9,5 +9,4 @@ if (J.net.isClient) {
     initClientSystems();
     initVehicleSystem();
     initVehicleUI();
-    game.attack("blank");
 }
