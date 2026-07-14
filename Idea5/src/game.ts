@@ -31,4 +31,7 @@ export function spawnEnemy(interval: number) {
     });
 };
 
+export function attack(type: string) {
+    
+};
 //Client Functions
