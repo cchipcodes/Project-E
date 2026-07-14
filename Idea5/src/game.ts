@@ -32,6 +32,28 @@ export function spawnEnemy(interval: number) {
 };
 
 export function attack(type: string) {
-    
+    switch(type) {
+        case "blank":
+            let lastAtkTime = 0;
+            const card = J.assets.props["Blank Card"];
+            const plr = J.getLocalPlayer()
+            J.onGameTick((_, time) => {
+                if (time - lastAtkTime > 5) {
+                    const newBlankCard = J.addCharacterMeshAttachmentProp(
+                        plr,
+                        card.id,
+                        "chest",
+                        [0,0,0],
+                        [0,0,0,0],
+                        1
+                    );
+                    J.onGameTick((_, newTime) => {
+                        if (newTime - time > 10) {
+                            J.removeCharacterMeshAttachment(plr, newBlankCard);
+                        }
+                    })
+                }
+            })
+    }
 };
 //Client Functions

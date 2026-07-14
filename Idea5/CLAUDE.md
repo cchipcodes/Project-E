@@ -16,6 +16,7 @@ Jamango is a voxel-based multiplayer game engine. Positions are in block units â
 - **Props**: Built from block structures in the editor. Can move, scale, rotate, have physics, have traits. Can be spawned client-side (local only) or server-side (synced).
 - **Characters**: Players and NPCs. Emotes, animations, movement. Server only for spawning in current engine.
 - **Areas**: Invisible collision volumes (box/sphere). Engine-optimized â€” generally prefer over manual distance checks.
+- **Ribbons**: Client-only path geometry with procedural arrows. Numeric ribbon IDs are not entity IDs; ribbons have no transforms, traits, physics, scene-tree nodes, or networking.
 - **Traits**: Data attached to any entity/area/block/world. Auto-sync to all clients via setTrait(). Added via wrench tool in editor.
 - **Commands**: Typed network messages (net.defineCommand) for clientâ†”server communication.
 
@@ -37,6 +38,7 @@ Jamango is a voxel-based multiplayer game engine. Positions are in block units â
 | Characters | Cannot spawn | Required |
 | Blocks | Synced automatically (same as server) | Synced to all players |
 | Particles | Client only (J.spawnParticles or prop-based) | Cannot spawn |
+| Ribbons | Required (local visual only) | Cannot create |
 | UI | Required (J.uiElement / J.onGameUiCanvas) | N/A |
 
 - Client: UI, input, visuals, player movement/velocity/teleportation, local-only props, particles
@@ -128,6 +130,7 @@ myButton.addEventListener("pointerdown", () => useAbility()); // mobile UI butto
 - Physics: setEntityVelocity, addEntityImpulse, raycast, spawnBoxArea, spawnSphereArea
 - Collisions: onEntityCollisionStart/End, onBlockCollisionStart/End
 - UI: uiElement, onGameUiCanvas, getPointer, setCrosshair, setBlockSelector, getScreenPosition, setUISettings
+- Ribbons: createRibbon, setRibbonGeometry, setRibbonStyle, setRibbonVisible, removeRibbon
 - Audio: playSound, playSoundAtPosition, playSoundAtEntity, setSoundVolume, setSoundFilter, stopSound | Chat: sendChatMessage
 - Persistent Data: getPlayerPersistentData, setPlayerPersistentData, leaderboards.defineLeaderboard, leaderboards.getPlayerScore, leaderboards.setPlayerScore, leaderboards.getTopScores, leaderboards.getScoresForPlayers
 
