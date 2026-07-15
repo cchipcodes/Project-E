@@ -520,7 +520,7 @@ function tickBobbingAndSpinning(time: number) {
             0,
             Math.cos((time * trait.speedDegreesPerSecond * Math.PI) / 180),
         ]);
-        J.setEntityVisualQuaternion(entityId, quat);
+        J.setEntityQuaternion(entityId, quat);
     }
 }
 
