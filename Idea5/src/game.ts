@@ -27,14 +27,28 @@ export function spawnEnemy(interval: number) {
                 repathSeconds: 0.45,
                 searchSize: 48,
             });
+            /*J.setTrait(newEnemyPawn, traits.ChainTrait, {
+                enabled: true,
+                trigger: "signal",
+                inputSignal: "zombieDamage",
+                action: "removeSelf",
+                outputSignal: ""
+            });*/
             lastSpawnTime = time;
         };
     });
 };
 
+export function killEnemy() {
+    J.onEntityCollisionStart({source: [traits.SpinningTrait], target: [traits.ZombieTrait]}, (_, enemy) => {
+        J.removeEntity(enemy);
+    });
+};
+
+//Client Functions
 export function useCard(type: string, duration: number, cooldown: number) {
-    J.onPlayerJoin(() => {
-        const plr = J.getLocalPlayer();
+    J.onPlayerJoin((plr) => {
+        //const plr = J.getLocalPlayer();
         switch(type) {
             case "blank":
                 let lastAtkTime = 0;
@@ -60,9 +74,16 @@ export function useCard(type: string, duration: number, cooldown: number) {
                         J.setTrait(spinningBC, traits.SpinningTrait, {
                             enabled: true,
                             axis: [0, 1, 0],
-                            speedDegreesPerSecond: 90
+                            speedDegreesPerSecond: 270
                         });
                         J.setTrait(spinningBC, traits.EnemyDamageTrait, { damage: 10 });
+                        /*J.setTrait(spinningBC, traits.ChainTrait, {
+                            enabled: true,
+                            trigger: "collision",
+                            inputSignal: "",
+                            action: "emitSignal",
+                            outputSignal: "zombieDamage"
+                        });*/
                         J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
                         console.log("Equipped");
                         equipTime = time;
@@ -78,9 +99,7 @@ export function useCard(type: string, duration: number, cooldown: number) {
                         const playerPos = J.getEntityPosition(plr);
                         J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
                     };
-                })
+                });
             }
     });
 };
-
-//Client Functions

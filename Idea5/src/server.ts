@@ -8,10 +8,11 @@ import * as game from "./game";
 if (J.net.isHost) {
   initServerSystems();
   initVehicleSystem();
+  game.killEnemy();
 
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  //game.spawnEnemy(5);
-  //game.useCard("blank", 5, 10);
+  game.spawnEnemy(5);
+  //game.useCard("blank", 10, 5);
 };
