@@ -1105,6 +1105,13 @@ export const ProjectileSpawnerTrait = J.defineTrait(
     },
 );
 
+export const EnemyDamageTrait = J.defineTrait(
+    "enemyDamage",
+    S.object({
+        damage: S.number({ label: "Damage", defaultValue: 10 })
+    })
+);
+
 export const ChainTrait = J.defineTrait(
     "chain",
     S.object({
