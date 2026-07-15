@@ -33,7 +33,8 @@ export function spawnEnemy(interval: number) {
 };
 
 export function useCard(type: string, duration: number, cooldown: number) {
-    J.onPlayerJoin((plr) => {
+    J.onPlayerJoin(() => {
+        const plr = J.getLocalPlayer();
         switch(type) {
             case "blank":
                 let lastAtkTime = 0;
@@ -75,7 +76,7 @@ export function useCard(type: string, duration: number, cooldown: number) {
                     };
                     if (spinningBC) {
                         const playerPos = J.getEntityPosition(plr);
-                        J.moveKinematicEntity(spinningBC, playerPos, [0,0,0,0]);
+                        J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
                     };
                 })
             }

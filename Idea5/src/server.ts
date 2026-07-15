@@ -13,5 +13,5 @@ if (J.net.isHost) {
     setInitialMovementSettings(playerId);
   });
   //game.spawnEnemy(5);
-  game.useCard("blank", 5, 10);
+  //game.useCard("blank", 5, 10);
 };
