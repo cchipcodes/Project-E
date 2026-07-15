@@ -75,11 +75,7 @@ export function useCard(type: string, duration: number, cooldown: number) {
                     };
                     if (spinningBC) {
                         const playerPos = J.getEntityPosition(plr);
-                        J.moveKinematicEntity(spinningBC, [
-                            playerPos[0],
-                            playerPos[1],
-                            playerPos[2],
-                        ], [0,0,0,0]);
+                        J.moveKinematicEntity(spinningBC, playerPos, [0,0,0,0]);
                     };
                 })
             }
