@@ -28,13 +28,6 @@ export function spawnEnemy(interval: number) {
                 searchSize: 48,
             });
             J.setTrait(newEnemyPawn, traits.EnemyTrait);
-            /*J.setTrait(newEnemyPawn, traits.ChainTrait, {
-                enabled: true,
-                trigger: "signal",
-                inputSignal: "zombieDamage",
-                action: "removeSelf",
-                outputSignal: ""
-            });*/
             lastSpawnTime = time;
         };
     });
@@ -46,7 +39,6 @@ export function killEnemy() {
     });
 };
 
-//Client Functions
 export function useCard(type: string, duration: number, cooldown: number) {
     J.onPlayerJoin((plr) => {
         //const plr = J.getLocalPlayer();
@@ -77,14 +69,6 @@ export function useCard(type: string, duration: number, cooldown: number) {
                             axis: [0, 1, 0],
                             speedDegreesPerSecond: 270
                         });
-                        J.setTrait(spinningBC, traits.EnemyDamageTrait, { damage: 10 });
-                        /*J.setTrait(spinningBC, traits.ChainTrait, {
-                            enabled: true,
-                            trigger: "collision",
-                            inputSignal: "",
-                            action: "emitSignal",
-                            outputSignal: "zombieDamage"
-                        });*/
                         J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
                         console.log("Equipped");
                         equipTime = time;
@@ -104,3 +88,6 @@ export function useCard(type: string, duration: number, cooldown: number) {
             }
     });
 };
+
+//Client Functions
+
