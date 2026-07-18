@@ -9,5 +9,5 @@ if (J.net.isClient) {
     initClientSystems();
     initVehicleSystem();
     initVehicleUI();
-    game.useCard("blank", 10, 5)
+    game.killEnemy();
 }

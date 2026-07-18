@@ -84,12 +84,13 @@ net.send(BUY, { key: "sword" });
 - For always-visible HTML UI (HUDs, leaderboards, kill feeds, ammo counters): follow HUD-PATTERN.md. Build the DOM once, store refs, use `textContent` with a last-value cache, drive animations via CSS `@keyframes` toggled by class. NEVER write `innerHTML` inside `onGameTick`, NEVER recompute scale/opacity in JS per tick, NEVER use `filter: drop-shadow` (use `text-shadow`).
 
 ## Player Input
-- Use J.onControlPress/J.onControlRelease for key bindings — not raw DOM events. Client-side only.
+- Use J.onControlPress/J.onControlRelease for key bindings, not raw DOM events. Key capture is client-side; handlers fire on client and host.
+- Keys are physical KeyboardEvent.code values relative to a US QWERTY keyboard, so they work on every layout. Common codes: letters KeyA to KeyZ, digits Digit0 to Digit9, function F1 to F12, arrows ArrowUp/ArrowDown/ArrowLeft/ArrowRight, modifiers Shift/Control/Alt/Meta, plus Space, Enter, Tab, Escape, Backspace, Delete, Backquote, Minus, Equal, BracketLeft, BracketRight, Semicolon, Quote, Comma, Period, Slash, and Numpad0 to Numpad9. Combos join with "+" like "Control+KeyB".
 - J.getCharacterInput(playerId) returns continuous input state (movement, camera, joystick).
 - Key bindings don't work on mobile. For cross-platform actions, extract the logic into a shared function and call it from both the key binding and a mobile UI button:
 ```
 function useAbility() { /* action logic */ }
-J.onControlPress("q", () => useAbility());        // desktop
+J.onControlPress("KeyQ", () => useAbility());     // desktop
 myButton.addEventListener("pointerdown", () => useAbility()); // mobile UI button (inside J.uiElement)
 ```
 
@@ -129,6 +130,7 @@ myButton.addEventListener("pointerdown", () => useAbility()); // mobile UI butto
 - Commands: net.defineCommand, net.send, net.sendToAll, net.listen
 - Physics: setEntityVelocity, addEntityImpulse, raycast, spawnBoxArea, spawnSphereArea
 - Collisions: onEntityCollisionStart/End, onBlockCollisionStart/End
+- Blocks: setBlock, setBlocks (batched, use for many blocks at once), getBlockShape, getBlockType
 - UI: uiElement, onGameUiCanvas, getPointer, setCrosshair, setBlockSelector, getScreenPosition, setUISettings
 - Ribbons: createRibbon, setRibbonGeometry, setRibbonStyle, setRibbonVisible, removeRibbon
 - Audio: playSound, playSoundAtPosition, playSoundAtEntity, setSoundVolume, setSoundFilter, stopSound | Chat: sendChatMessage

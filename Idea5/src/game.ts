@@ -27,6 +27,7 @@ export function spawnEnemy(interval: number) {
                 repathSeconds: 0.45,
                 searchSize: 48,
             });
+            J.setTrait(newEnemyPawn, traits.EnemyTrait);
             /*J.setTrait(newEnemyPawn, traits.ChainTrait, {
                 enabled: true,
                 trigger: "signal",
@@ -40,7 +41,7 @@ export function spawnEnemy(interval: number) {
 };
 
 export function killEnemy() {
-    J.onEntityCollisionStart({source: [traits.SpinningTrait], target: [traits.ZombieTrait]}, (_, enemy) => {
+    J.onEntityCollisionStart({source: [traits.SpinningTrait], target: [traits.EnemyTrait]}, (_, enemy) => {
         J.removeEntity(enemy);
     });
 };
@@ -97,7 +98,7 @@ export function useCard(type: string, duration: number, cooldown: number) {
                     };
                     if (spinningBC) {
                         const playerPos = J.getEntityPosition(plr);
-                        J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
+                        J.moveKinematicEntity(spinningBC, [playerPos[0], playerPos[1] + 1.5, playerPos[2]], [0,0,0,0]);
                     };
                 });
             }

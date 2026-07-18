@@ -1105,11 +1105,17 @@ export const ProjectileSpawnerTrait = J.defineTrait(
     },
 );
 
-export const EnemyDamageTrait = J.defineTrait(
-    "enemyDamage",
+export const EnemyTrait = J.defineTrait(
+    "enemy",
     S.object({
-        damage: S.number({ label: "Damage", defaultValue: 10 })
-    })
+        health: S.number({ label: "Health", defaultValue: 10 })
+    }),
+    {
+        name: "Enemy",
+        icon: "🔴",
+        description: "Cretes a player enemy",
+        color: "#ff0000ff"
+    }
 );
 
 export const ChainTrait = J.defineTrait(
