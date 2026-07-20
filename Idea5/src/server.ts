@@ -8,7 +8,7 @@ import * as game from "./game";
 if (J.net.isHost) {
   initServerSystems();
   initVehicleSystem();
-  game.killEnemy();
+  game.damageEnemy(10);
 
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);

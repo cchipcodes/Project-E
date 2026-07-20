@@ -3,9 +3,11 @@ import * as traits from "./traits/index"
 // Constants and Variables
 
 //Server Functions
-export function killEnemy() {
+export function damageEnemy(d: number) {
     J.onEntityCollisionStart({source: [traits.SpinningTrait], target: [traits.EnemyTrait]}, (_, enemy) => {
-        J.removeEntity(enemy);
+        const Damage = J.getTrait(enemy, traits.EnemyTrait);
+        const currentHealth = Damage.health;
+        
     });
 };
 
