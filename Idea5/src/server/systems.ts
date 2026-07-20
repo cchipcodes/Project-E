@@ -1110,30 +1110,12 @@ function buildOverrideAvatar(
     trait: TraitData<typeof AvatarOverrideTrait>,
 ): J.CharacterAvatarConfig {
     const avatar = cloneAvatar(base);
-    if (trait.skinColorPrimary) avatar.skinColorPrimary = trait.skinColorPrimary;
-    if (trait.skinColorSecondary) avatar.skinColorSecondary = trait.skinColorSecondary;
-    if (avatar.face && trait.mouthId) avatar.face.mouthId = trait.mouthId;
     if (avatar.anim && trait.idleAnimation) {
         avatar.anim.idle = toAvatarAnimationId(trait.idleAnimation);
     }
     if (avatar.anim && trait.runAnimation) {
         avatar.anim.run = toAvatarAnimationId(trait.runAnimation);
     }
-
-    if (avatar.components) {
-        if (trait.headComponent) avatar.components.head = [{ id: trait.headComponent }];
-        if (trait.chestComponent) avatar.components.chest = [{ id: trait.chestComponent }];
-        if (trait.waistComponent) avatar.components.waist = [{ id: trait.waistComponent }];
-        if (trait.armLeftComponent) avatar.components.armLeft = [{ id: trait.armLeftComponent }];
-        if (trait.armRightComponent) avatar.components.armRight = [{ id: trait.armRightComponent }];
-        if (trait.handLeftComponent) avatar.components.handLeft = [{ id: trait.handLeftComponent }];
-        if (trait.handRightComponent) avatar.components.handRight = [{ id: trait.handRightComponent }];
-        if (trait.legLeftComponent) avatar.components.legLeft = [{ id: trait.legLeftComponent }];
-        if (trait.legRightComponent) avatar.components.legRight = [{ id: trait.legRightComponent }];
-        if (trait.footLeftComponent) avatar.components.footLeft = [{ id: trait.footLeftComponent }];
-        if (trait.footRightComponent) avatar.components.footRight = [{ id: trait.footRightComponent }];
-    }
-
     return avatar;
 }
 
@@ -1142,10 +1124,6 @@ function buildZombieAvatar(
     trait: TraitData<typeof ZombieTrait>,
 ): J.CharacterAvatarConfig {
     const avatar = cloneAvatar(base);
-    avatar.skinColorPrimary = trait.skinColorPrimary;
-    avatar.skinColorSecondary = trait.skinColorSecondary;
-
-    if (avatar.face) avatar.face.mouthId = trait.mouthId;
 
     if (avatar.anim) {
         avatar.anim.idle = toAvatarAnimationId(
@@ -1158,17 +1136,6 @@ function buildZombieAvatar(
                 J.assets.animations.locomotion_zombie_run?.id ||
                 avatar.anim.run,
         );
-    }
-
-    if (avatar.components) {
-        avatar.components.chest = [{ id: "basicZombie_chest_basicZombie" }];
-        avatar.components.waist = [{ id: "basicZombie_waist_basicZombie" }];
-        avatar.components.armLeft = [{ id: "basicZombie_armLeft_basicZombie" }];
-        avatar.components.armRight = [{ id: "basicZombie_armRight_basicZombie" }];
-        avatar.components.handLeft = [{ id: "basicZombie_handLeft_basicZombie" }];
-        avatar.components.handRight = [{ id: "basicZombie_handRight_basicZombie" }];
-        avatar.components.footLeft = [{ id: "basicZombie_footLeft_basicZombie" }];
-        avatar.components.footRight = [{ id: "basicZombie_footRight_basicZombie" }];
     }
 
     return avatar;
