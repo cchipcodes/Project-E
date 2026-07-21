@@ -436,6 +436,8 @@ function respawnPlayerAt(
     const target = getPlacementTarget(entityId, offset, rotation);
     if (!target) {
         J.setCharacterAlive(playerId, true);
+        J.removeTrait(playerId, PlayerTrait)
+        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
         return;
     }
 
@@ -449,6 +451,8 @@ function respawnPlayerAt(
         playerId,
     );
     J.setCharacterAlive(playerId, true);
+    J.removeTrait(playerId, PlayerTrait)
+    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
 }
 
 function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
@@ -463,6 +467,8 @@ function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
         playerId,
     );
     J.setCharacterAlive(playerId, true);
+    J.removeTrait(playerId, PlayerTrait)
+    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
 }
 
 function handleTimerStart(entityId: J.EntityId, playerId: J.EntityId, time: number) {

@@ -13,5 +13,5 @@ if (J.net.isHost) {
     setInitialMovementSettings(playerId);
   });
   game.useCard("blank", 20, 20);
-  //game.playerHealthManager();
+  game.damageEnemy();
 };

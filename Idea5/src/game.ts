@@ -1,10 +1,12 @@
 import * as J from "jamango";
-import * as traits from "./traits/index"
-import * as server from "./server/systems"
+import * as traits from "./traits/index";
+import * as server from "./server/systems";
+import * as hudkit from "./client/hud-kit";
 // Constants and Variables
+let healthUI: HTMLDivElement | undefined;
 
 //Server Functions
-function damageEnemy() {
+export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.EnemyDamageTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const d = J.getTrait(proj, traits.EnemyDamageTrait).damage;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
@@ -14,58 +16,47 @@ function damageEnemy() {
             J.setTrait(enemy, traits.EnemyTrait, {
                 health: currentHealth - d
             });
+            J.clearCharacterMoveTarget(enemy);
             J.addEntityVelocity(enemy, [100,100,50]);
         } else {
             J.removeEntity(enemy);
         };
+        J.removeEntity(proj);
     });
 };
 
 export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         const Damage = J.getTrait(plr, traits.PlayerTrait);
-        const currentHealth = Damage.health;
+        let currentHealth = Damage.health;
         const currentScore = Damage.score;
         if (currentHealth > 0) {
+            console.log(currentHealth);
             J.removeTrait(plr, traits.PlayerTrait);
             J.setTrait(plr, traits.PlayerTrait, {
                 health: currentHealth - d,
                 score: currentScore
             });
+            currentHealth = Damage.health;
+            console.log(currentHealth);
+            if (currentHealth <= 0) {
+                server.killPlayer(plr, t)
+            };
         } else {
             server.killPlayer(plr, t);
         };
 };
 
-export function playerHealthManager() {
-    J.onGameTick(() => {
-        const players = J.getAllWithTraits([traits.PlayerTrait]);
-        for (const player of players) {
-            if (checkHealth(player[0]) == 0) {
-                J.setCharacterAlive(player[0], false)
-                console.log('Killed', player[0]);
-            };
-        };
-    });
-};
-
-function checkHealth(entity: J.EntityId) {
-    const health = J.getTrait(entity, traits.PlayerTrait).health;
-    console.log(health);
-    return health;
-};
-
 export function useCard(type: string, duration: number, cooldown: number) {
     J.onPlayerJoin((plr) => {
-        //const plr = J.getLocalPlayer();
         switch(type) {
             case "blank":
                 let lastAtkTime = 0;
                 let equipTime = 0;
                 J.onGameTick((_, time) => {
-                    damageEnemy();
-                    if (!J.getTrait(plr, traits.HeldItemTrait) && time - lastAtkTime > cooldown) {
+                    //damageEnemy();
+                    if (time - lastAtkTime > cooldown) {
                         const card = J.assets.props["Blank Card"]
-                        const newBlankCard = J.setTrait(plr, traits.HeldItemTrait, {
+                        J.setTrait(plr, traits.HeldItemTrait, {
                             enabled: true,
                             firstPerson: true,
                             source: {type: "prop", prop: card.id},
@@ -98,6 +89,7 @@ export function useCard(type: string, duration: number, cooldown: number) {
                                 },
                             },
                         });
+                        equipTime = time;
                     };
                     if (equipTime && time - equipTime > duration) {
                         J.removeTrait(plr,traits.HeldItemTrait);
@@ -112,4 +104,26 @@ export function useCard(type: string, duration: number, cooldown: number) {
 };
 
 //Client Functions
+export function HUD() {
+    const plr = J.getLocalPlayer();
+    J.onGameStart(() => {
+        const HUD = hudkit.createHUDPanel("health");
+        HUD.style.top = "24px";
+        HUD.style.left = "5px";
 
+        healthUI = hudkit.createText(HUD, "health", "NULL");
+    });
+    J.onGameRender(() => {
+        updateHealthUI(plr, healthUI);
+    });
+};
+
+function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
+    hudkit.setText(ui, String(checkHealth(plr)));
+};
+
+// Shared Functions
+function checkHealth(entity: J.EntityId) {
+    const health = J.getTrait(entity, traits.PlayerTrait).health;
+    return health;
+};

@@ -9,5 +9,5 @@ if (J.net.isClient) {
     initClientSystems();
     initVehicleSystem();
     initVehicleUI();
-    //game.useCard("blank", 20, 20);
+    game.HUD();
 }
