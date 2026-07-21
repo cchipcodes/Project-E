@@ -1,4 +1,5 @@
 import * as J from "jamango";
+import * as game from "../game";
 import {
     AvatarOverrideTrait,
     ChainTrait,
@@ -367,7 +368,7 @@ function handleCheckpoint(entityId: J.EntityId, playerId: J.EntityId, time: numb
 }
 
 // Kills a player with the death animation + delayed respawn.  
-function killPlayer(playerId: J.EntityId, time: number, respawnDelaySeconds = 0) {
+export function killPlayer(playerId: J.EntityId, time: number, respawnDelaySeconds = 0) {
     if (pendingRespawns.has(playerId)) return false;
     if (J.getCharacterAlive(playerId) === false) return false;
     if (time < (deathGraceUntil.get(playerId) ?? 0)) return false;
@@ -1035,7 +1036,7 @@ function handleZombieTouch(entityId: J.EntityId, playerId: J.EntityId, time: num
     if (time - lastAttack < trait.damageCooldownSeconds) return;
 
     lastZombieAttackAt.set(key, time);
-    killPlayer(playerId, time);
+    game.damagePlayer(10, playerId, time);
 }
 
 function tickNPCLookAt(time: number) {
