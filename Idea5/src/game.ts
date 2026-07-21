@@ -4,8 +4,9 @@ import * as server from "./server/systems"
 // Constants and Variables
 
 //Server Functions
-function damageEnemy(d: number) {
-    J.onEntityCollisionStart({source: [traits.SpinningTrait], target: [traits.EnemyTrait]}, (_, enemy) => {
+function damageEnemy() {
+    J.onEntityCollisionStart({source: [traits.EnemyDamageTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
+        const d = J.getTrait(proj, traits.EnemyDamageTrait).damage;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
         const currentHealth = Damage.health;
         if (currentHealth > 0) {
@@ -13,6 +14,7 @@ function damageEnemy(d: number) {
             J.setTrait(enemy, traits.EnemyTrait, {
                 health: currentHealth - d
             });
+            J.addEntityVelocity(enemy, [100,100,50]);
         } else {
             J.removeEntity(enemy);
         };
@@ -59,9 +61,8 @@ export function useCard(type: string, duration: number, cooldown: number) {
             case "blank":
                 let lastAtkTime = 0;
                 let equipTime = 0;
-                let spinningBC: number | undefined;
                 J.onGameTick((_, time) => {
-                    damageEnemy(2);
+                    damageEnemy();
                     if (!J.getTrait(plr, traits.HeldItemTrait) && time - lastAtkTime > cooldown) {
                         const card = J.assets.props["Blank Card"]
                         const newBlankCard = J.setTrait(plr, traits.HeldItemTrait, {
@@ -77,26 +78,33 @@ export function useCard(type: string, duration: number, cooldown: number) {
                             scale: 0.1,
                             fpScale: 0.1
                         });
-                        spinningBC = J.spawnProp(card.id);
-                        J.setTrait(spinningBC, traits.SpinningTrait, {
-                            enabled: true,
-                            axis: [0, 1, 0],
-                            speedDegreesPerSecond: 270
+                        J.setTrait(plr, traits.ProjectileSpawnerTrait, {
+                            "enabled": true,
+                            "projectile": "prop#E1BE395617A24B34A29009E07F7C3C17",
+                            "killOnHit": false,
+                            "direction": [
+                            0,
+                            0,
+                            1
+                            ],
+                            "speed": 24,
+                            "fireEverySeconds": 1.5,
+                            "lifetimeSeconds": 5,
+                            "scale": 1,
+                            "startDelaySeconds": 0,
+                            "projectileTraits": {
+                                "enemyDamage": {
+                                    "damage": 10
+                                },
+                            },
                         });
-                        J.moveKinematicEntity(spinningBC, J.getEntityPosition(plr), [0,0,0,0]);
-                        console.log("Equipped");
-                        equipTime = time;
                     };
                     if (equipTime && time - equipTime > duration) {
                         J.removeTrait(plr,traits.HeldItemTrait);
-                        J.removeEntity(spinningBC);
+                        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
                         console.log("Unequipped");
                         equipTime = 0;
                         lastAtkTime = time;
-                    };
-                    if (spinningBC) {
-                        const playerPos = J.getEntityPosition(plr);
-                        J.moveKinematicEntity(spinningBC, [playerPos[0], playerPos[1] + 1.5, playerPos[2]], [0,0,0,0]);
                     };
                 });
             }

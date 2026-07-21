@@ -1113,9 +1113,22 @@ export const EnemyTrait = J.defineTrait(
     {
         name: "Enemy",
         icon: "🔴",
-        description: "Cretes a player enemy",
+        description: "Creates a player enemy",
         color: "#ff0000ff"
     }
+);
+
+export const EnemyDamageTrait = J.defineTrait(
+    "enemyDamage",
+    S.object({
+        damage: S.number({ label: "Damage", defaultValue: 10 }),
+    }),
+    {
+        name: "Enemy Damage",
+        icon: "💔",
+        description: "Damages an enemy",
+        color: "#007b91"
+    },
 );
 
 export const ChainTrait = J.defineTrait(

@@ -936,7 +936,9 @@ function tickProjectileSpawners(time: number) {
         const position = J.getEntityPosition(entityId);
         if (!position) continue;
 
-        const direction = normalizeVec3(trait.direction);
+        const lookAt = J.getCharacterViewRay(entityId);
+        const vel = trait.direction
+        const direction = normalizeVec3(lookAt.direction);
         const projectile = J.spawnProp(trait.projectile);
         J.setEntityPosition(projectile, addVec3(position, scaleVec3(direction, 1.2)), false);
         J.setEntityQuaternion(projectile, yawQuatFromDirection(direction));

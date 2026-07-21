@@ -12,6 +12,6 @@ if (J.net.isHost) {
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  //game.useCard("blank", 20, 20);
+  game.useCard("blank", 20, 20);
   //game.playerHealthManager();
 };
