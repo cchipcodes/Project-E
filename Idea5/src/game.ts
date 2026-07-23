@@ -17,7 +17,7 @@ export function damageEnemy() {
                 health: currentHealth - d
             });
             J.clearCharacterMoveTarget(enemy);
-            J.addEntityVelocity(enemy, [100,100,100]);
+            J.characterJump(enemy, 10, true, false);
         } else {
             J.removeEntity(enemy);
         };
