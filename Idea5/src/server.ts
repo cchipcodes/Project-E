@@ -11,7 +11,8 @@ if (J.net.isHost) {
 
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
-    game.useCard("blank", 2, playerId);
+    //game.useCard("blank", 2, playerId);
+    game.useCard("reverse", 5, playerId);
   });
   game.damageEnemy();
 };

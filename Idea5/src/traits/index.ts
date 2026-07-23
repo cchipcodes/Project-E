@@ -1166,4 +1166,18 @@ export const ChainTrait = J.defineTrait(
     },
 );
 
+export const EnemyStealTrait = J.defineTrait(
+    "enemySteal",
+    S.object({
+        damage: S.number({ label: "Damage", defaultValue: 10 }),
+        player: S.entityId({ label: "Player Entity" }),
+    }),
+    {
+        name: "Enemy Steal",
+        icon: "🥷",
+        description: "Steals health from enemy",
+        color: "#ffff00"
+    }
+)
+
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";
