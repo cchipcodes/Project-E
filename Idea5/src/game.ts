@@ -17,7 +17,7 @@ export function damageEnemy() {
                 health: currentHealth - d
             });
             J.clearCharacterMoveTarget(enemy);
-            J.addEntityVelocity(enemy, [100,100,50]);
+            J.addEntityVelocity(enemy, [100,100,100]);
         } else {
             J.removeEntity(enemy);
         };
@@ -46,63 +46,6 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         };
 };
 
-export function useCard(type: string, duration: number, cooldown: number) {
-    J.onPlayerJoin((plr) => {
-        switch(type) {
-            case "blank":
-                let lastAtkTime = 0;
-                let equipTime = 0;
-                J.onGameTick((_, time) => {
-                    //damageEnemy();
-                    if (time - lastAtkTime > cooldown) {
-                        const card = J.assets.props["Blank Card"]
-                        J.setTrait(plr, traits.HeldItemTrait, {
-                            enabled: true,
-                            firstPerson: true,
-                            source: {type: "prop", prop: card.id},
-                            slot: "handRight",
-                            holdPose: "",
-                            position: [0,0,0],
-                            fpPosition: [0.5,-0.7,-0.7],
-                            rotation: [0,0,0],
-                            fpRotation: [0,0,0],
-                            scale: 0.1,
-                            fpScale: 0.1
-                        });
-                        J.setTrait(plr, traits.ProjectileSpawnerTrait, {
-                            "enabled": true,
-                            "projectile": "prop#E1BE395617A24B34A29009E07F7C3C17",
-                            "killOnHit": false,
-                            "direction": [
-                            0,
-                            0,
-                            1
-                            ],
-                            "speed": 24,
-                            "fireEverySeconds": 1.5,
-                            "lifetimeSeconds": 5,
-                            "scale": 1,
-                            "startDelaySeconds": 0,
-                            "projectileTraits": {
-                                "enemyDamage": {
-                                    "damage": 10
-                                },
-                            },
-                        });
-                        equipTime = time;
-                    };
-                    if (equipTime && time - equipTime > duration) {
-                        J.removeTrait(plr,traits.HeldItemTrait);
-                        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
-                        console.log("Unequipped");
-                        equipTime = 0;
-                        lastAtkTime = time;
-                    };
-                });
-            }
-    });
-};
-
 //Client Functions
 export function HUD() {
     const plr = J.getLocalPlayer();
@@ -120,6 +63,42 @@ export function HUD() {
 
 function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
     hudkit.setText(ui, String(checkHealth(plr)));
+};
+
+export function useCard(type: string, cooldown: number, plr: J.EntityId) {
+        switch(type) {
+            case "blank":
+                const card = J.assets.props["Blank Card"]
+                J.setTrait(plr, traits.HeldItemTrait, {
+                    enabled: true,
+                    firstPerson: true,
+                    source: {type: "prop", prop: card.id},
+                    slot: "handRight",
+                    holdPose: J.assets.animations.items_shield_idle_over.id,
+                    position: [0,0,0],
+                    fpPosition: [0.5,-0.7,-0.7],
+                    rotation: [0,0,0],
+                    fpRotation: [0,0,0],
+                    scale: 0.1,
+                    fpScale: 0.1
+                });
+                J.setTrait(plr, traits.ProjectileSpawnerTrait, {
+                    "enabled": true,
+                    "projectile": "prop#E1BE395617A24B34A29009E07F7C3C17",
+                    "killOnHit": false,
+                    "direction": [0,0,1],
+                    "speed": 90,
+                    "fireEverySeconds": cooldown,
+                    "lifetimeSeconds": 5,
+                    "scale": 1,
+                    "startDelaySeconds": 0,
+                    "projectileTraits": {
+                        "enemyDamage": {
+                            "damage": 10
+                        },
+                    },
+                });
+    }
 };
 
 // Shared Functions

@@ -938,16 +938,26 @@ function tickProjectileSpawners(time: number) {
             continue;
         }
         if (time < nextAt) continue;
+        let position: J.Vec3
+        let direction: J.Vec3;
+        if (J.getTrait(entityId, PlayerTrait)) {
+           position = addVec3(J.getEntityPosition(entityId), ([0,1.5,0] as J.Vec3));
+        } else {
+            position = J.getEntityPosition(entityId);
+        };
 
-        const position = J.getEntityPosition(entityId);
         if (!position) continue;
 
-        const lookAt = J.getCharacterViewRay(entityId);
+        const lookAt = J.getCharacterViewRay(entityId).direction;
         const vel = trait.direction
-        const direction = normalizeVec3(lookAt.direction);
+        if (J.getTrait(entityId, PlayerTrait)) {
+            direction = normalizeVec3(lookAt);
+        } else {
+            direction = normalizeVec3(vel);
+        };
         const projectile = J.spawnProp(trait.projectile);
         J.setEntityPosition(projectile, addVec3(position, scaleVec3(direction, 1.2)), false);
-        J.setEntityQuaternion(projectile, yawQuatFromDirection(direction));
+        J.setEntityQuaternion(projectile, yawQuatFromDirection(normalizeVec3(direction)));
         J.setEntityScale(projectile, trait.scale);
         J.updatePropPhysicsProperties(projectile, {
             motionType: J.MOTION_TYPE_DYNAMIC,
