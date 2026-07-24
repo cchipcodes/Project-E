@@ -66,6 +66,7 @@ export function playerAttacked() {
     J.onEntityCollisionStart({ source: [traits.PlayerDamageTrait], target: [traits.PlayerTrait] }, (proj, plr) => {
         const trait = J.getTrait(proj, traits.PlayerDamageTrait);
         damagePlayer(trait.damage, plr, server.serverTime);
+        J.removeEntity(proj);
     });
 }
 
