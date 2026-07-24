@@ -2,7 +2,7 @@ import * as J from "jamango";
 import * as traits from "./traits/index";
 import * as server from "./server/systems";
 import * as hudkit from "./client/hud-kit";
-import { AssetSchema } from "jamango/schema";
+import * as commands from "./shared/commands";
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
 
@@ -44,6 +44,7 @@ export function damageEnemy() {
             J.characterJump(enemy, 10, true, false);
         } else {
             J.removeEntity(enemy);
+            J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
         };
         J.removeEntity(proj);
 
@@ -114,7 +115,21 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                     },
                 },
             });
+            break;
         case "reverse":
+            J.setTrait(plr, traits.HeldItemTrait, {
+                enabled: true,
+                firstPerson: true,
+                source: {type: "prop", prop: J.assets.props["New Prop"].id},
+                slot: "handRight",
+                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
+                position: [0,0,0],
+                fpPosition: [0.5,-0.7,-0.7],
+                rotation: [0,0,0],
+                fpRotation: [0,0,0],
+                scale: 1,
+                fpScale: 1
+            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
                 "projectile": J.assets.props["New Prop"].id,
@@ -132,10 +147,18 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                     }
                 },
             });
+            break;
         }
 };
 
 //Client Functions
+export function gameClientTasks() {
+    J.net.listen(commands.EnemyDeathCommand, (pos) => {
+        const particles = J.spawnParticles(J.assets.particles["Energy Ball"].id);
+        J.setEntityPosition(particles, pos.position);
+    })
+};
+
 export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {

@@ -6,6 +6,10 @@ export const ShowNotificationCommand = J.net.defineCommand<{
     sound?: string;
 }>("template-show-notification");
 
+export const EnemyDeathCommand = J.net.defineCommand<{
+    position: J.Vec3;
+}>("enemy-killed");
+
 export const PlayLocalSoundCommand = J.net.defineCommand<{
     sound: string;
     volume?: number;

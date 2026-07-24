@@ -10,4 +10,5 @@ if (J.net.isClient) {
     initVehicleSystem();
     initVehicleUI();
     game.HUD();
+    game.gameClientTasks();
 }
