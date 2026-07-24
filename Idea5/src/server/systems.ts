@@ -94,7 +94,7 @@ const zombieAvatarApplied = new Set<J.EntityId>();
 const avatarOverrideApplied = new Set<J.EntityId>();
 const MIN_DEATH_RESPAWN_SECONDS = 1.1;
 const DEATH_RESPAWN_GRACE_SECONDS = 0.75;
-let serverTime = 0;
+export let serverTime = 0;
 
 export function initServerSystems() {
     if (!J.net.isHost) return;

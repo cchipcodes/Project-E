@@ -1175,9 +1175,22 @@ export const EnemyStealTrait = J.defineTrait(
     {
         name: "Enemy Steal",
         icon: "🥷",
-        description: "Steals health from enemy",
+        description: "Steals health from enemy on collision.",
         color: "#ffff00"
     }
-)
+);
+
+export const PlayerDamageTrait = J.defineTrait(
+    "playerDamage",
+    S.object({
+        damage: S.number({ label: "Damage", defaultValue: 10 }),
+    }),
+    {
+        name: "Player Damage",
+        icon: "🟥",
+        description: "Damages a player on collision.",
+        color: "#5c0000"
+    }
+);
 
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";

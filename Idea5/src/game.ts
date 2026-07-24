@@ -58,6 +58,13 @@ export function damageEnemy() {
     });
 };
 
+export function playerAttacked() {
+    J.onEntityCollisionStart({ source: [traits.PlayerDamageTrait], target: [traits.PlayerTrait] }, (proj, plr) => {
+        const trait = J.getTrait(proj, traits.PlayerDamageTrait);
+        damagePlayer(trait.damage, plr, server.serverTime);
+    });
+}
+
 export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         const Damage = J.getTrait(plr, traits.PlayerTrait);
         let currentHealth = Damage.health;

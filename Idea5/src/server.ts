@@ -14,4 +14,5 @@ if (J.net.isHost) {
     game.useCard("blank", 2, playerId);
   });
   game.damageEnemy();
+  game.playerAttacked();
 };
