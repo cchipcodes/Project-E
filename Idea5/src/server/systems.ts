@@ -29,6 +29,7 @@ import {
     TimerStartTrait,
     VelocityImpulseTrait,
     ZombieTrait,
+    EnemyTrait,
 } from "../traits";
 import {
     ApplyVelocityImpulseCommand,
@@ -940,7 +941,7 @@ function tickProjectileSpawners(time: number) {
         if (time < nextAt) continue;
         let position: J.Vec3
         let direction: J.Vec3;
-        if (J.getTrait(entityId, PlayerTrait)) {
+        if (J.getTrait(entityId, PlayerTrait) || J.getTrait(entityId, EnemyTrait).type == "Rook") {
            position = addVec3(J.getEntityPosition(entityId), ([0,1.5,0] as J.Vec3));
         } else {
             position = J.getEntityPosition(entityId);
@@ -950,7 +951,7 @@ function tickProjectileSpawners(time: number) {
 
         const lookAt = J.getCharacterViewRay(entityId).direction;
         const vel = trait.direction
-        if (J.getTrait(entityId, PlayerTrait)) {
+        if (J.getTrait(entityId, PlayerTrait) || J.getTrait(entityId, EnemyTrait).type == "Rook") {
             direction = normalizeVec3(lookAt);
         } else {
             direction = normalizeVec3(vel);

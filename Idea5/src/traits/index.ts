@@ -1108,7 +1108,12 @@ export const ProjectileSpawnerTrait = J.defineTrait(
 export const EnemyTrait = J.defineTrait(
     "enemy",
     S.object({
-        health: S.number({ label: "Health", defaultValue: 10 })
+        health: S.number({ label: "Health", defaultValue: 10 }),
+        type: S.string({ label: "Enemy Type", control: "select", options: [
+            { label: "Pawn", value: "Pawn" },
+            { label: "Rook", value: "Rook" },
+            { label: "Knight", value: "Knight" },
+        ]}),
     }),
     {
         name: "Enemy",

@@ -13,10 +13,12 @@ export function damageEnemy() {
         const d = J.getTrait(proj, traits.EnemyDamageTrait).damage;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
         const currentHealth = Damage.health;
+        const enemyType = Damage.type;
         if (currentHealth > 0) {
             J.removeTrait(enemy, traits.EnemyTrait);
             J.setTrait(enemy, traits.EnemyTrait, {
-                health: currentHealth - d
+                health: currentHealth - d,
+                type: enemyType,
             });
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
@@ -34,11 +36,13 @@ export function damageEnemy() {
         const plrTrait = J.getTrait(plr, traits.PlayerTrait);
         const playerHealth = plrTrait.health;
         const playerScore = plrTrait.score;
+        const enemyType = Damage.type;
 
         if (currentHealth > 0) {
             J.removeTrait(enemy, traits.EnemyTrait);
             J.setTrait(enemy, traits.EnemyTrait, {
-                health: currentHealth - d
+                health: currentHealth - d,
+                type: enemyType,
             });
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
