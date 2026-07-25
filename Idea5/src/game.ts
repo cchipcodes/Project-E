@@ -48,8 +48,8 @@ export function damageEnemy() {
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
         } else {
-            J.removeEntity(enemy);
             J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
+            J.removeEntity(enemy);
         };
         J.removeEntity(proj);
 
@@ -188,7 +188,7 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
 //Client Functions
 export function gameClientTasks() {
     J.net.listen(commands.EnemyDeathCommand, (data) => {
-        const particles = J.spawnParticles(J.assets.particles["Energy Ball"].id);
+        const particles = J.spawnParticles(J.assets.particles.Bang.id);
         J.setEntityPosition(particles, data.position, false);
     });
     abilitySwitch();
