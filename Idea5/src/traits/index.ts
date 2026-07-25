@@ -1198,4 +1198,20 @@ export const PlayerDamageTrait = J.defineTrait(
     }
 );
 
+export const PlayerAbilitiesTrait = J.defineTrait(
+    "playerAbilities",
+    S.object({
+        abilities: S.list(
+            S.string({ label: "Abilities" }),
+        ),
+        current: S.number({ label: "Current Active Ability", defaultValue: 0 })
+    }),
+    {
+        name: "Player Abilities",
+        icon: "🃏",
+        description: "Applies cards to the player",
+        color: "#00ffff"
+    },
+);
+
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";

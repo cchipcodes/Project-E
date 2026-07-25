@@ -10,6 +10,10 @@ export const EnemyDeathCommand = J.net.defineCommand<{
     position: J.Vec3;
 }>("enemy-killed");
 
+export const PlayerAbilitySwitchCommand = J.net.defineCommand<{
+    player: J.EntityId;
+}>("player-ability-switch");
+
 export const PlayLocalSoundCommand = J.net.defineCommand<{
     sound: string;
     volume?: number;

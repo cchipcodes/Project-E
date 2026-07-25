@@ -11,8 +11,8 @@ if (J.net.isHost) {
 
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
-    game.useCard("blank", 2, playerId);
   });
   game.damageEnemy();
   game.playerAttacked();
+  game.abilitySwitch();
 };

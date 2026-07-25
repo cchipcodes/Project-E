@@ -30,6 +30,7 @@ import {
     VelocityImpulseTrait,
     ZombieTrait,
     EnemyTrait,
+    PlayerAbilitiesTrait,
 } from "../traits";
 import {
     ApplyVelocityImpulseCommand,
@@ -297,6 +298,13 @@ function initializePlayer(playerId: J.EntityId) {
             startTime: 0,
             elapsedSeconds: 0,
             bestSeconds: 0,
+        });
+    }
+
+    if (!J.getTrait(playerId, PlayerAbilitiesTrait)) {
+        J.setTrait(playerId, PlayerAbilitiesTrait, {
+            abilities: ["blank", "reverse"],
+            current: 0,
         });
     }
 

@@ -3,6 +3,7 @@ import * as traits from "./traits/index";
 import * as server from "./server/systems";
 import * as hudkit from "./client/hud-kit";
 import * as commands from "./shared/commands";
+
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
 
@@ -91,6 +92,27 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         };
 };
 
+export function switchCard(plr: J.EntityId) {
+    const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);
+    const currentIndex = trait.current;
+    const listOfCards = trait.abilities;
+    J.removeTrait(plr, traits.PlayerAbilitiesTrait);
+
+    if (listOfCards.length == currentIndex) {
+        useCard(listOfCards[0], 5, plr);
+        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+            abilities: listOfCards,
+            current: 0,
+        });
+    } else {
+        useCard(listOfCards[currentIndex], 5, plr);
+        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+            abilities: listOfCards,
+            current: currentIndex + 1,
+        });
+    };
+};
+
 export function useCard(type: string, cooldown: number, plr: J.EntityId) {
     if (J.getTrait(plr, traits.HeldItemTrait) && J.getTrait(plr, traits.ProjectileSpawnerTrait)) {
         J.removeTrait(plr, traits.HeldItemTrait);
@@ -165,19 +187,19 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
 
 //Client Functions
 export function gameClientTasks() {
-    J.net.listen(commands.EnemyDeathCommand, (pos) => {
+    J.net.listen(commands.EnemyDeathCommand, (data) => {
         const particles = J.spawnParticles(J.assets.particles["Energy Ball"].id);
-        J.setEntityPosition(particles, pos.position);
-    })
+        J.setEntityPosition(particles, data.position, false);
+    });
+    abilitySwitch();
 };
 
 export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {
         const HUD = hudkit.createHUDPanel("health");
-        HUD.style.top = "24px";
-
         healthUI = hudkit.createText(HUD, "health", "NULL");
+        
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthUI);
@@ -192,4 +214,19 @@ function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
 function checkHealth(entity: J.EntityId) {
     const health = J.getTrait(entity, traits.PlayerTrait).health;
     return health;
+};
+
+export function abilitySwitch() {
+    if (J.net.isClient) {
+        const plr = J.getLocalPlayer()
+        J.onControlPress("KeyE", (playerId) => {
+            if (playerId !== plr) return;
+            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
+        })
+    }
+    if (J.net.isHost) {
+        J.net.listen(commands.PlayerAbilitySwitchCommand, (ent) => {
+            switchCard(ent.player);
+        });
+    };
 };
