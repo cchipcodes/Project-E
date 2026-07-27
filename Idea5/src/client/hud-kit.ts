@@ -138,6 +138,8 @@ export function positionClass(position: string) {
             return "jt-pos-top-middle";
         case "bottom-middle":
             return "jt-pos-bottom-middle";
+        case "middle":
+            return "jt-pos-middle";
         default:
             return "jt-pos-left-middle";
     }
@@ -169,6 +171,7 @@ function injectStyles() {
 .jt-pos-left-middle-top { top: 20%; left: 18px; transform: translateY(-50%); }
 .jt-pos-left-middle-bottom { top: 60%; left: 18px; transform: translateY(-50%); }
 .jt-pos-top-middle { top: 18px; left: 50%; transform: translateX(-50%); }
+.jt-pos-middle { top: 50%; left: 50%; transform: translateX(-50%); }
 .jt-pos-bottom-middle { bottom: 18px; left: 50%; transform: translateX(-50%); }
 .jt-label {
     color: rgba(255, 255, 255, 0.72);

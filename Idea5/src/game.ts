@@ -23,6 +23,29 @@ const LEVEL_XP = [
     6426,
 ];
 
+const ABILITY_CARDS = [
+    "Reverse",
+    "King",
+    "Queen of Hearts",
+    "Joker",
+    "Rebound"
+];
+
+const MOVEMENT_MULTIPLIERS = [
+    1,
+    1.05,
+    1.15,
+    1.30,
+    1.50
+];
+
+const XP_GAIN = [
+    10,
+    10.25,
+    12.25,
+    14
+];
+
 //Server Functions
 export function damageEnemy() {
     //blank
