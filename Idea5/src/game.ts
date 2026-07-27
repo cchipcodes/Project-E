@@ -184,7 +184,7 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                 "startDelaySeconds": 0,
                 "projectileTraits": {
                     "enemySteal": {
-                        damage: 10,
+                        damage: 7,
                         player: plr,
                     }
                 },
