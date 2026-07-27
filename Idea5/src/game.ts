@@ -61,10 +61,15 @@ export function damageEnemy() {
         };
         J.removeEntity(proj);
 
-        if (playerHealth < 100) {
+        if (playerHealth + d < 100) {
             J.removeTrait(plr, traits.PlayerTrait);
             J.setTrait(plr, traits.PlayerTrait, {
                 health: playerHealth + d,
+                score: playerScore,
+            });
+        } else {
+            J.setTrait(plr, traits.PlayerTrait, {
+                health: 100,
                 score: playerScore,
             });
         };
