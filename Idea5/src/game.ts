@@ -13,18 +13,22 @@ export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.EnemyDamageTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const d = J.getTrait(proj, traits.EnemyDamageTrait).damage;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
-        const currentHealth = Damage.health;
+        let currentHealth = Damage.health;
         const enemyType = Damage.type;
+        J.removeTrait(enemy, traits.EnemyTrait);
+        J.setTrait(enemy, traits.EnemyTrait, {
+            health: currentHealth - d,
+            type: enemyType,
+        });
         if (currentHealth > 0) {
-            J.removeTrait(enemy, traits.EnemyTrait);
-            J.setTrait(enemy, traits.EnemyTrait, {
-                health: currentHealth - d,
-                type: enemyType,
-            });
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
-        } else {
-            J.removeEntity(enemy);
+            currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
+            console.log(currentHealth);
+            if (currentHealth <= 0) {
+                J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
+                J.removeEntity(enemy);   
+            };
         };
         J.removeEntity(proj);
     });
@@ -33,7 +37,7 @@ export function damageEnemy() {
         const d = J.getTrait(proj, traits.EnemyStealTrait).damage;
         const plr = J.getTrait(proj, traits.EnemyStealTrait).player;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
-        const currentHealth = Damage.health;
+        let currentHealth = Damage.health;
         const plrTrait = J.getTrait(plr, traits.PlayerTrait);
         const playerHealth = plrTrait.health;
         const playerScore = plrTrait.score;
@@ -47,9 +51,12 @@ export function damageEnemy() {
             });
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
-        } else {
-            J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
-            J.removeEntity(enemy);
+            currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
+            console.log(currentHealth);
+            if (currentHealth <= 0) {
+                J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
+                J.removeEntity(enemy);   
+            };
         };
         J.removeEntity(proj);
 
@@ -76,19 +83,16 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         let currentHealth = Damage.health;
         const currentScore = Damage.score;
         if (currentHealth > 0) {
-            console.log(currentHealth);
             J.removeTrait(plr, traits.PlayerTrait);
             J.setTrait(plr, traits.PlayerTrait, {
                 health: currentHealth - d,
                 score: currentScore
             });
-            currentHealth = Damage.health;
-            console.log(currentHealth);
+            currentHealth = J.getTrait(plr, traits.PlayerTrait).health
+            console.log(J.getTrait(plr, traits.PlayerTrait).health);
             if (currentHealth <= 0) {
                 server.killPlayer(plr, t)
             };
-        } else {
-            server.killPlayer(plr, t);
         };
 };
 
@@ -197,9 +201,8 @@ export function gameClientTasks() {
 export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {
-        const HUD = hudkit.createHUDPanel("health");
-        healthUI = hudkit.createText(HUD, "health", "NULL");
-        
+        healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
+        const healthCounter = hudkit.createText(healthUI, "health", "NULL");
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthUI);
