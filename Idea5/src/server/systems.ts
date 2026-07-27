@@ -303,7 +303,7 @@ function initializePlayer(playerId: J.EntityId) {
 
     if (!J.getTrait(playerId, PlayerAbilitiesTrait)) {
         J.setTrait(playerId, PlayerAbilitiesTrait, {
-            abilities: ["blank", "reverse"],
+            abilities: ["Blank", "Reverse"],
             current: 0,
         });
     }

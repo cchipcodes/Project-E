@@ -6,6 +6,7 @@ import * as commands from "./shared/commands";
 
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
+let abilityUI: HTMLDivElement | undefined;
 
 //Server Functions
 export function damageEnemy() {
@@ -98,23 +99,26 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
 
 export function switchCard(plr: J.EntityId) {
     const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);
-    const currentIndex = trait.current;
+    let currentIndex = trait.current;
     const listOfCards = trait.abilities;
     J.removeTrait(plr, traits.PlayerAbilitiesTrait);
 
     if (listOfCards.length == currentIndex) {
         useCard(listOfCards[0], 5, plr);
-        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
-            abilities: listOfCards,
-            current: 0,
-        });
+        currentIndex = 0;
     } else {
         useCard(listOfCards[currentIndex], 5, plr);
-        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
-            abilities: listOfCards,
-            current: currentIndex + 1,
-        });
+        if (currentIndex + 1 == listOfCards.length) {
+            currentIndex = 0;
+        } else {
+            currentIndex = currentIndex + 1;
+        };
+
     };
+    J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+        abilities: listOfCards,
+        current: currentIndex,
+    });
 };
 
 export function useCard(type: string, cooldown: number, plr: J.EntityId) {
@@ -123,13 +127,13 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
         J.removeTrait(plr, traits.ProjectileSpawnerTrait);
     };
     switch(type) {
-        case "blank":
+        case "Blank":
             J.setTrait(plr, traits.HeldItemTrait, {
                 enabled: true,
                 firstPerson: true,
                 source: {type: "prop", prop: J.assets.props["Blank Card"].id},
                 slot: "handRight",
-                holdPose: J.assets.animations.items_shield_idle_over.id,
+                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
                 position: [0,0,0],
                 fpPosition: [0.5,-0.7,-0.7],
                 rotation: [0,0,0],
@@ -154,7 +158,7 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                 },
             });
             break;
-        case "reverse":
+        case "Reverse":
             J.setTrait(plr, traits.HeldItemTrait, {
                 enabled: true,
                 firstPerson: true,
@@ -203,6 +207,8 @@ export function HUD() {
     J.onGameStart(() => {
         healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
         const healthCounter = hudkit.createText(healthUI, "health", "NULL");
+        abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
+        const currentAbility = hudkit.createText(abilityUI, "ability", "None");
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthUI);
@@ -211,6 +217,13 @@ export function HUD() {
 
 function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
     hudkit.setText(ui, String(checkHealth(plr)));
+};
+
+function updateAbilityUI(plr: J.EntityId, ui: HTMLDivElement) {
+    const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);
+    const i = trait.current;
+    const active = trait.abilities[i];
+    hudkit.setText(ui, active);
 };
 
 // Shared Functions
@@ -225,7 +238,8 @@ export function abilitySwitch() {
         J.onControlPress("KeyE", (playerId) => {
             if (playerId !== plr) return;
             J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
-        })
+            updateAbilityUI(plr, abilityUI);
+        });
     }
     if (J.net.isHost) {
         J.net.listen(commands.PlayerAbilitySwitchCommand, (ent) => {
