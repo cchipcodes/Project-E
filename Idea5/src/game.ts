@@ -190,6 +190,43 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                 },
             });
             break;
+        case "Rebound":
+            J.setTrait(plr, traits.HeldItemTrait, {
+                enabled: true,
+                firstPerson: true,
+                source: {type: "prop", prop: J.assets.props["New Prop"].id},
+                slot: "handRight",
+                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
+                position: [0,0,0],
+                fpPosition: [0.5,-0.7,-0.7],
+                rotation: [0,0,0],
+                fpRotation: [0,0,0],
+                scale: 1,
+                fpScale: 1
+            });
+            J.setTrait(plr, traits.ProjectileSpawnerTrait, {
+                "enabled": true,
+                "projectile": J.assets.props["New Prop"].id,
+                "killOnHit": false,
+                "direction": [0,0,1],
+                "speed": 90,
+                "fireEverySeconds": cooldown,
+                "lifetimeSeconds": 5,
+                "scale": 1,
+                "startDelaySeconds": 0,
+                "projectileTraits": {
+                    "velocityImpulse": {
+                        "enabled": true,
+                        "velocity": [
+                        10,
+                        10,
+                        10
+                        ],
+                        "additive": false,
+                        "predictable": true
+                    },
+                },
+            });
         }
 };
 
