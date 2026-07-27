@@ -7,6 +7,8 @@ import * as commands from "./shared/commands";
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
 let abilityUI: HTMLDivElement | undefined;
+let healthCounter: HTMLDivElement | undefined;
+let currentAbility: HTMLDivElement | undefined;
 
 //Server Functions
 export function damageEnemy() {
@@ -248,12 +250,14 @@ export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {
         healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
-        const healthCounter = hudkit.createText(healthUI, "health", "NULL");
+        hudkit.createText(healthUI, "jt-label", "Health")
+        healthCounter = hudkit.createText(healthUI, "jt-value", "NULL");
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
-        const currentAbility = hudkit.createText(abilityUI, "ability", "None");
+        hudkit.createText(abilityUI, "jt-label", "Card");
+        currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
     });
     J.onGameRender(() => {
-        updateHealthUI(plr, healthUI);
+        updateHealthUI(plr, healthCounter);
     });
 };
 
@@ -280,7 +284,7 @@ export function abilitySwitch() {
         J.onControlPress("KeyE", (playerId) => {
             if (playerId !== plr) return;
             J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
-            updateAbilityUI(plr, abilityUI);
+            updateAbilityUI(plr, currentAbility);
         });
     }
     if (J.net.isHost) {
