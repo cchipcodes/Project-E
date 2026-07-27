@@ -63,7 +63,6 @@ export function damageEnemy() {
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
             currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
-            console.log(currentHealth);
             if (currentHealth <= 0) {
                 J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
                 J.removeEntity(enemy);   
@@ -90,7 +89,6 @@ export function damageEnemy() {
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
             currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
-            console.log(currentHealth);
             if (currentHealth <= 0) {
                 J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
                 J.removeEntity(enemy);   
@@ -134,7 +132,6 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
                 level: Damage.level,
             });
             currentHealth = J.getTrait(plr, traits.PlayerTrait).health
-            console.log(J.getTrait(plr, traits.PlayerTrait).health);
             if (currentHealth <= 0) {
                 server.killPlayer(plr, t)
             };
