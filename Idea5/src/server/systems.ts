@@ -279,7 +279,7 @@ export function initServerSystems() {
 
 function initializePlayer(playerId: J.EntityId) {
     if (!J.getTrait(playerId, PlayerTrait)) {
-        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
+        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100, level: 0 });
     }
 
     if (!J.getTrait(playerId, PlayerCollectablesTrait)) {
@@ -446,7 +446,7 @@ function respawnPlayerAt(
     if (!target) {
         J.setCharacterAlive(playerId, true);
         J.removeTrait(playerId, PlayerTrait)
-        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
+        J.setTrait(playerId, PlayerTrait, { score: 0, health: 100, level: 0 });
         return;
     }
 
@@ -461,7 +461,7 @@ function respawnPlayerAt(
     );
     J.setCharacterAlive(playerId, true);
     J.removeTrait(playerId, PlayerTrait)
-    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
+    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100, level: 0 });
 }
 
 function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
@@ -477,7 +477,7 @@ function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
     );
     J.setCharacterAlive(playerId, true);
     J.removeTrait(playerId, PlayerTrait)
-    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
+    J.setTrait(playerId, PlayerTrait, { score: 0, health: 100, level: 0 });
 }
 
 function handleTimerStart(entityId: J.EntityId, playerId: J.EntityId, time: number) {
@@ -563,6 +563,7 @@ function handleCollectable(entityId: J.EntityId, playerId: J.EntityId, time: num
     J.setTrait(playerId, PlayerTrait, {
         score: (player?.score ?? 0) + trait.value,
         health: (player?.health),
+        level: (player?.level),
     });
 
     if (trait.sound) J.net.send(PlayLocalSoundCommand, { sound: trait.sound }, playerId);

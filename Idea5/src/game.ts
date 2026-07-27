@@ -9,6 +9,19 @@ let healthUI: HTMLDivElement | undefined;
 let abilityUI: HTMLDivElement | undefined;
 let healthCounter: HTMLDivElement | undefined;
 let currentAbility: HTMLDivElement | undefined;
+let levelUI: HTMLDivElement | undefined;
+let currentLevel: HTMLDivElement | undefined;
+const LEVEL_XP = [
+    0,
+    102,
+    402,
+    903,
+    1605,
+    2508,
+    3611,
+    4917,
+    6426,
+];
 
 //Server Functions
 export function damageEnemy() {
@@ -43,7 +56,6 @@ export function damageEnemy() {
         let currentHealth = Damage.health;
         const plrTrait = J.getTrait(plr, traits.PlayerTrait);
         const playerHealth = plrTrait.health;
-        const playerScore = plrTrait.score;
         const enemyType = Damage.type;
 
         if (currentHealth > 0) {
@@ -67,12 +79,14 @@ export function damageEnemy() {
             J.removeTrait(plr, traits.PlayerTrait);
             J.setTrait(plr, traits.PlayerTrait, {
                 health: playerHealth + d,
-                score: playerScore,
+                score: plrTrait.score,
+                level: plrTrait.level
             });
         } else {
             J.setTrait(plr, traits.PlayerTrait, {
                 health: 100,
-                score: playerScore,
+                score: plrTrait.score,
+                level: plrTrait.level
             });
         };
     });
@@ -89,12 +103,12 @@ export function playerAttacked() {
 export function damagePlayer(d: number, plr: J.EntityId, t: number) {
         const Damage = J.getTrait(plr, traits.PlayerTrait);
         let currentHealth = Damage.health;
-        const currentScore = Damage.score;
         if (currentHealth > 0) {
             J.removeTrait(plr, traits.PlayerTrait);
             J.setTrait(plr, traits.PlayerTrait, {
                 health: currentHealth - d,
-                score: currentScore
+                score: Damage.score,
+                level: Damage.level,
             });
             currentHealth = J.getTrait(plr, traits.PlayerTrait).health
             console.log(J.getTrait(plr, traits.PlayerTrait).health);
@@ -237,6 +251,20 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
         }
 };
 
+export function updatePlayerLevel(plr: J.EntityId) {
+    const plrTrait = J.getTrait(plr, traits.PlayerTrait);
+    const level = plrTrait.level;
+    const xp = plrTrait.score;
+    if (xp >= LEVEL_XP[level + 1]) {
+        J.removeTrait(plr, traits.PlayerTrait);
+        J.setTrait(plr, traits.PlayerTrait, {
+            health: plrTrait.health,
+            score: plrTrait.score,
+            level: plrTrait.level + 1
+        });
+    };
+};
+
 //Client Functions
 export function gameClientTasks() {
     J.net.listen(commands.EnemyDeathCommand, (data) => {
@@ -255,15 +283,24 @@ export function HUD() {
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
         hudkit.createText(abilityUI, "jt-label", "Card");
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
+        levelUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-top")}`);
+        hudkit.createText(levelUI, "jt-label", "Level");
+        currentLevel = hudkit.createText(levelUI, "jt-value", "NULL")
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthCounter);
+        updateLevelUI(plr, currentLevel);
     });
 };
 
 function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
     hudkit.setText(ui, String(checkHealth(plr)));
 };
+
+function updateLevelUI(plr: J.EntityId, ui: HTMLDivElement) {
+    const level = J.getTrait(plr, traits.PlayerTrait).level;
+    hudkit.setText(ui, String(level));
+}
 
 function updateAbilityUI(plr: J.EntityId, ui: HTMLDivElement) {
     const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);

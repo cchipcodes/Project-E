@@ -11,8 +11,12 @@ if (J.net.isHost) {
 
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
+    J.onGameTick(() => {
+      game.updatePlayerLevel(playerId);
+    });
   });
   game.damageEnemy();
   game.playerAttacked();
   game.abilitySwitch();
+
 };
