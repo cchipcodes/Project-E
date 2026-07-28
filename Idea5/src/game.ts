@@ -18,12 +18,12 @@ const ABILITY_CARDS = [
     "Rebound"
 ];
 
-const MOVEMENT_MULTIPLIERS = [
-    1,
-    1.05,
-    1.15,
-    1.30,
-    1.50
+const MOVEMENT_SPEEDS = [
+    6,
+    6.3,
+    6.9,
+    7.9,
+    9
 ];
 
 const ATTACK_SPEEDS = [

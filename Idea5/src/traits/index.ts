@@ -24,7 +24,7 @@ export const PlayerTrait = J.defineTrait(
     "player",
     S.object({
         score: S.number({ label: "Score", defaultValue: 0, hidden: true }),
-        health: S.number({ label: "Health", defaultValue: 0, hidden: true}),
+        health: S.number({ label: "Health", defaultValue: 0, hidden: true }),
     }),
     {
         name: "Player",
@@ -1218,18 +1218,12 @@ export const LootCardTrait = J.defineTrait(
     "lootCard",
     S.object({
         card: S.string({ label: "Card", control: "select", options:[
-            { value: "Reverse", label: "Reverse" },
-            { value: "King", label: "King" },
-            { value: "Queen", label: "Queen of Hearts" },
-            { value: "Rebound", label: "Rebound" },
-            { value: "m1", label: "Movement Level 1" },
-            { value: "m2", label: "Movement Level 2" },
-            { value: "m3", label: "Movement Level 3" },
-            { value: "m4", label: "Movement Level 4" },
-            { value: "a1", label: "Attack Level 1" },
-            { value: "a2", label: "Attack Level 2" },
-            { value: "a3", label: "Attack Level 3" },
-            { value: "a4", label: "Attack Level 4" },
+            { value: "Reverse", label: "Reverse Card" },
+            { value: "King", label: "King Card" },
+            { value: "Queen", label: "Queen of Hearts Card" },
+            { value: "Rebound", label: "Rebound Card" },
+            { value: "Movement", label: "Movement Upgrade" },
+            { value: "Attack", label: "Attack Upgrade" },
         ]}),
     }),
     {
