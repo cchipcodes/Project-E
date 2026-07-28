@@ -38,6 +38,60 @@ const ATTACK_SPEEDS = [
 ];
 
 //Server Functions
+export function interactWithUpgrade() {
+    J.onEntityCollisionStart({ source:[traits.PlayerTrait], target: [traits.LootCardTrait]}, (plr, loot) => {
+        const playerAbilities = J.getTrait(plr, traits.PlayerAbilitiesTrait);
+        const lootCard = J.getTrait(loot, traits.LootCardTrait);
+        const playerMovement = J.getCharacterMovementProperties(plr);
+
+        if (lootCard.card == "Movement") {
+            let next = 0;
+            for (let index in MOVEMENT_SPEEDS) {
+                if (playerMovement.walkSpeed == MOVEMENT_SPEEDS[index]) {
+                    next = MOVEMENT_SPEEDS[Number(index) + 1];
+                };
+            };
+            if (next == MOVEMENT_SPEEDS[-1]) { return };
+            J.setCharacterMovementProperties(plr, { walkSpeed: next });
+            J.removeEntity(loot);
+        } else if (lootCard.card == "Attack") {
+            let next = 0
+            for (let i in ATTACK_SPEEDS) {
+                if (playerAbilities.reload == ATTACK_SPEEDS[i]) {
+                    next = ATTACK_SPEEDS[Number(i) + 1];
+                };
+            };
+            if (next == ATTACK_SPEEDS[-1]) { return };
+            J.removeTrait(plr, traits.PlayerAbilitiesTrait);
+            J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+                abilities: playerAbilities.abilities,
+                current: playerAbilities.current,
+                reload: next
+            });
+            J.removeEntity(loot)
+        } else {
+            let playerCards = playerAbilities.abilities;
+            let newCard = ""
+            for (let indexedCard of playerCards) {
+                if (lootCard.card == indexedCard) {
+                    return;
+                } else {
+                    newCard = lootCard.card;
+                    playerCards.push(newCard);
+                };
+            };
+            if (newCard == "") { return };
+            J.removeTrait(plr, traits.PlayerAbilitiesTrait);
+            J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+                abilities: playerCards,
+                current: playerAbilities.current,
+                reload: playerAbilities.reload
+            });
+            J.removeEntity(loot);
+        };
+    });
+}
+
 export function damageEnemy() {
     //blank
     J.onEntityCollisionStart({source: [traits.EnemyDamageTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
@@ -133,10 +187,10 @@ export function switchCard(plr: J.EntityId) {
     J.removeTrait(plr, traits.PlayerAbilitiesTrait);
 
     if (listOfCards.length == currentIndex) {
-        useCard(listOfCards[0], 2.5, plr);
+        useCard(listOfCards[0], trait.reload, plr);
         currentIndex = 0;
     } else {
-        useCard(listOfCards[currentIndex], 2.5, plr);
+        useCard(listOfCards[currentIndex], trait.reload, plr);
         if (currentIndex + 1 == listOfCards.length) {
             currentIndex = 0;
         } else {
@@ -147,6 +201,7 @@ export function switchCard(plr: J.EntityId) {
     J.setTrait(plr, traits.PlayerAbilitiesTrait, {
         abilities: listOfCards,
         current: currentIndex,
+        reload: trait.reload
     });
 };
 
@@ -275,7 +330,7 @@ export function HUD() {
         statUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle")}`);
         hudkit.createText(statUI, "jt-label", "Stats");
         speedCounter = hudkit.createText(statUI, "jt-value", `Speed: NULL`);
-        cooldownCounter = hudkit.createText(statUI, "jt-value", `Cooldown: NULL`);
+        cooldownCounter = hudkit.createText(statUI, "jt-value", `Reload: NULL`);
         //Health HUD Panel
         healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
         hudkit.createText(healthUI, "jt-label", "Health")
@@ -287,12 +342,25 @@ export function HUD() {
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthCounter);
+        updateSpeedUI(plr, speedCounter);
+        updateCooldownUI(plr, cooldownCounter);
     });
 };
 
 function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
     hudkit.setText(ui, String(checkHealth(plr)));
 };
+
+function updateSpeedUI(plr: J.EntityId, ui: HTMLDivElement) {
+    const speed = J.getCharacterMovementProperties(plr).walkSpeed;
+    hudkit.setText(ui, `Speed: ${String(speed)}`);
+};
+
+function updateCooldownUI(plr: J.EntityId, ui: HTMLDivElement) {
+    const cd = J.getTrait(plr, traits.PlayerAbilitiesTrait).reload;
+    hudkit.setText(ui, `Reload: ${String(cd)}`);
+};
+
 
 function updateAbilityUI(plr: J.EntityId, ui: HTMLDivElement) {
     const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);

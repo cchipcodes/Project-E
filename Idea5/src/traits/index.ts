@@ -1204,7 +1204,8 @@ export const PlayerAbilitiesTrait = J.defineTrait(
         abilities: S.list(
             S.string({ label: "Abilities" }),
         ),
-        current: S.number({ label: "Current Active Ability", defaultValue: 0 })
+        current: S.number({ label: "Current Active Ability", defaultValue: 0 }),
+        reload: S.number({ label: "Reload Speed", defaultValue: 5 }),
     }),
     {
         name: "Player Abilities",

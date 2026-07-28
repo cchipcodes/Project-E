@@ -303,8 +303,9 @@ function initializePlayer(playerId: J.EntityId) {
 
     if (!J.getTrait(playerId, PlayerAbilitiesTrait)) {
         J.setTrait(playerId, PlayerAbilitiesTrait, {
-            abilities: ["Blank", "Reverse", "Rebound"],
+            abilities: ["Blank"],
             current: 0,
+            reload: 5,
         });
     }
 

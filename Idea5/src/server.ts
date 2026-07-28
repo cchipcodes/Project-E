@@ -15,5 +15,5 @@ if (J.net.isHost) {
   game.damageEnemy();
   game.playerAttacked();
   game.abilitySwitch();
-
+  game.interactWithUpgrade();
 };
