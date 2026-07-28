@@ -13,14 +13,6 @@ let currentAbility: HTMLDivElement | undefined;
 let speedCounter: HTMLDivElement | undefined;
 let cooldownCounter: HTMLDivElement | undefined;
 
-const ABILITY_CARDS = [
-    "Reverse",
-    "King",
-    "Queen of Hearts",
-    "Joker",
-    "Rebound"
-];
-
 const MOVEMENT_SPEEDS = [
     6,
     6.3,
