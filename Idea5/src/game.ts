@@ -7,8 +7,11 @@ import * as commands from "./shared/commands";
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
 let abilityUI: HTMLDivElement | undefined;
+let statUI: HTMLDivElement | undefined;
 let healthCounter: HTMLDivElement | undefined;
 let currentAbility: HTMLDivElement | undefined;
+let speedCounter: HTMLDivElement | undefined;
+let cooldownCounter: HTMLDivElement | undefined;
 
 const ABILITY_CARDS = [
     "Reverse",
@@ -268,9 +271,16 @@ export function gameClientTasks() {
 export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {
+        //Stats HUD Panel
+        statUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle")}`);
+        hudkit.createText(statUI, "jt-label", "Stats");
+        speedCounter = hudkit.createText(statUI, "jt-value", `Speed: NULL`);
+        cooldownCounter = hudkit.createText(statUI, "jt-value", `Cooldown: NULL`);
+        //Health HUD Panel
         healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
         hudkit.createText(healthUI, "jt-label", "Health")
         healthCounter = hudkit.createText(healthUI, "jt-value", "NULL");
+        //Ability HUD Panel
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
         hudkit.createText(abilityUI, "jt-label", "Card");
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
