@@ -1214,4 +1214,43 @@ export const PlayerAbilitiesTrait = J.defineTrait(
     },
 );
 
+export const LootCardTrait = J.defineTrait(
+    "lootCard",
+    S.object({
+        card: S.string({ label: "Card", control: "select", options:[
+            { value: "Reverse", label: "Reverse" },
+            { value: "King", label: "King" },
+            { value: "Queen", label: "Queen of Hearts" },
+            { value: "Rebound", label: "Rebound" },
+            { value: "m1", label: "Movement Level 1" },
+            { value: "m2", label: "Movement Level 2" },
+            { value: "m3", label: "Movement Level 3" },
+            { value: "m4", label: "Movement Level 4" },
+            { value: "a1", label: "Attack Level 1" },
+            { value: "a2", label: "Attack Level 2" },
+            { value: "a3", label: "Attack Level 3" },
+            { value: "a4", label: "Attack Level 4" },
+        ]}),
+    }),
+    {
+        name: "Player Loot",
+        description: "Allows a player to upgrade their stats or abilities",
+        icon: "💰",
+        color: "#ffc400",
+    },
+);
+
+export const ChestTrait = J.defineTrait(
+    "chest",
+    S.object({
+        level: S.number({ label: "Level", defaultValue: 1, control: "range"}),
+    }),
+    {
+        name: "Chest",
+        description: "Gives 3 loot options on activation",
+        icon: "🧰",
+        color: "#0cf700",
+    },
+);
+
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";

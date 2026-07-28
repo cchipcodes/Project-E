@@ -26,11 +26,12 @@ const MOVEMENT_MULTIPLIERS = [
     1.50
 ];
 
-const XP_GAIN = [
-    10,
-    10.25,
-    12.25,
-    14
+const ATTACK_SPEEDS = [
+    5,
+    4.75,
+    4,
+    2.75,
+    1
 ];
 
 //Server Functions
@@ -129,10 +130,10 @@ export function switchCard(plr: J.EntityId) {
     J.removeTrait(plr, traits.PlayerAbilitiesTrait);
 
     if (listOfCards.length == currentIndex) {
-        useCard(listOfCards[0], 5, plr);
+        useCard(listOfCards[0], 2.5, plr);
         currentIndex = 0;
     } else {
-        useCard(listOfCards[currentIndex], 5, plr);
+        useCard(listOfCards[currentIndex], 2.5, plr);
         if (currentIndex + 1 == listOfCards.length) {
             currentIndex = 0;
         } else {
