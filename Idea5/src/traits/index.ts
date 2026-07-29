@@ -1113,6 +1113,9 @@ export const EnemyTrait = J.defineTrait(
             { label: "Pawn", value: "Pawn" },
             { label: "Rook", value: "Rook" },
             { label: "Knight", value: "Knight" },
+            { label: "Bishop", value: "Bishop" },
+            { label: "King", value: "King" },
+            { label: "Queen", value: "Queen" }
         ]}),
     }),
     {
