@@ -1220,7 +1220,6 @@ export const LootCardTrait = J.defineTrait(
     S.object({
         card: S.string({ label: "Card", control: "select", options:[
             { value: "Reverse", label: "Reverse Card" },
-            { value: "King", label: "King Card" },
             { value: "Queen", label: "Queen of Hearts Card" },
             { value: "Rebound", label: "Rebound Card" },
             { value: "Movement", label: "Movement Upgrade" },
