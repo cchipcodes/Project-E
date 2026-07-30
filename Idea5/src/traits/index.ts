@@ -15,7 +15,7 @@ const animationAsset = (label: string, optional = true) =>
     S.asset({ label, assetTypes: ["animation"], optional });
 
 const propAsset = (label: string, optional = true) =>
-    S.asset({ label, assetTypes: ["prop", "avatar"], optional });
+    S.asset({ label, assetTypes: ["prop"], optional });
 
 const runtimeNumber = (label: string, defaultValue = 0) =>
     S.number({ label, defaultValue, hidden: true });
