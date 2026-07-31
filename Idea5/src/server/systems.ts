@@ -1022,6 +1022,10 @@ function tickZombiePathing(time: number) {
     for (const [entityId, trait] of J.getAllWithTraits([ZombieTrait])) {
         if (!trait.enabled || !isGateActive(entityId)) continue;
 
+        J.setCharacterMovementProperties(entityId, {
+            walkSpeed: trait.movementSpeed
+        });
+
         const nextAt = nextZombiePathAt.get(entityId) ?? 0;
         if (time < nextAt) continue;
         nextZombiePathAt.set(entityId, time + trait.repathSeconds);
