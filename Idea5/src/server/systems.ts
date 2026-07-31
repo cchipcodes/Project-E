@@ -1051,13 +1051,19 @@ function tickZombiePathing(time: number) {
         const targetPos = J.getEntityPosition(closestPlayer);
         if (!targetPos) continue;
 
+        const reflected: J.Vec3 = [
+            2 * zombiePos[0] - targetPos[0],
+            targetPos[1],
+            2 * zombiePos[2] - targetPos[2]
+        ];
+
         if (closestDistance <= trait.attackRange * trait.attackRange) {
             handleZombieTouch(entityId, closestPlayer, time);
             continue;
         }
 
-        const path = J.findPath(zombiePos, targetPos, trait.searchSize);
-        J.setCharacterMoveTarget(entityId, path.success && path.path.length > 0 ? path.path : [targetPos]);
+        const path = J.findPath(zombiePos, reflected, trait.searchSize);
+        J.setCharacterMoveTarget(entityId, path.success && path.path.length > 0 ? path.path : [reflected]);
     }
 }
 
@@ -1098,7 +1104,7 @@ function tickNPCLookAt(time: number) {
             if (distance > closestDistance) continue;
 
             closestDistance = distance;
-            closestPosition = playerPos;
+            closestPosition = [2 * npcPos[0] - playerPos[0], playerPos[1], 2 * npcPos[2] - playerPos[2]];
         }
 
         if (!closestPosition) continue;
