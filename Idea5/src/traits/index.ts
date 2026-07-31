@@ -856,6 +856,7 @@ export const ZombieTrait = J.defineTrait(
         detectRange: S.number({ label: "Detect range", defaultValue: 28, min: 1 }),
         attackRange: S.number({ label: "Attack range", defaultValue: 2.4, min: 0.5 }),
         movementSpeed: S.number({ label: "Movement Speed", defaultValue: 6 }),
+        damage: S.number({ label: "Damage", defaultValue: 10 }),
         damageCooldownSeconds: S.number({
             label: "Attack cooldown",
             defaultValue: 1,
