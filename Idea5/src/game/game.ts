@@ -146,6 +146,14 @@ export function HUD() {
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
         hudkit.createText(abilityUI, "jt-label", "Card");
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
+        const abilityBtn = document.createElement("button");
+        abilityBtn.textContent = "⚡";
+        abilityBtn.style.cssText = "position:absolute;bottom:80px;right:16px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityBtn.addEventListener("pointerdown", () => {
+            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
+            updateAbilityUI(plr, currentAbility);
+        });
+        J.uiElement?.appendChild(abilityBtn);
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthCounter);
