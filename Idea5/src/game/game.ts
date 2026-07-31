@@ -27,7 +27,8 @@ const UPGRADE_CARDS = [
     "Hearts",
     "Rebound",
     "Joker",
-    "Reverse"
+    "Reverse",
+    "King",
 ];
 
 const ATTACK_SPEEDS = [
@@ -82,6 +83,10 @@ export function interactWithUpgrade() {
             };
             if (next == MOVEMENT_SPEEDS[-1]) { return };
             J.setCharacterMovementProperties(plr, { walkSpeed: next });
+            J.net.send(commands.ShowNotificationCommand, {
+                message: "Movement Upgrade Obtained!",
+                durationSeconds: 3
+            }, plr);
             J.removeEntity(loot);
         } else if (lootCard.card == "Attack") {
             let next = 0
@@ -97,25 +102,27 @@ export function interactWithUpgrade() {
                 current: playerAbilities.current,
                 reload: next
             });
+            J.net.send(commands.ShowNotificationCommand, {
+                message: "Attack Upgrade Obtained!",
+                durationSeconds: 3
+            }, plr);
             J.removeEntity(loot)
         } else {
             let playerCards = playerAbilities.abilities;
             let newCard = ""
-            for (let indexedCard of playerCards) {
-                if (lootCard.card == indexedCard) {
-                    return;
-                } else {
-                    newCard = lootCard.card;
-                    playerCards.push(newCard);
-                };
-            };
-            if (newCard == "") { return };
+            if (playerCards.includes(lootCard.card)) return;
+            newCard = lootCard.card;
+            playerCards.push(newCard);
             J.removeTrait(plr, traits.PlayerAbilitiesTrait);
             J.setTrait(plr, traits.PlayerAbilitiesTrait, {
                 abilities: playerCards,
                 current: playerAbilities.current,
                 reload: playerAbilities.reload
             });
+            J.net.send(commands.ShowNotificationCommand, {
+                message: `${lootCard.card} Card Obtained!`,
+                durationSeconds: 3
+            }, plr);
             J.removeEntity(loot);
         };
     });

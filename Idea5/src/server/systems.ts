@@ -303,7 +303,7 @@ function initializePlayer(playerId: J.EntityId) {
 
     if (!J.getTrait(playerId, PlayerAbilitiesTrait)) {
         J.setTrait(playerId, PlayerAbilitiesTrait, {
-            abilities: ["Blank", "King", "Joker"],
+            abilities: ["Blank"],
             current: 0,
             reload: 5,
         });
@@ -449,7 +449,7 @@ function respawnPlayerAt(
         J.removeTrait(playerId, PlayerTrait)
         J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
         J.removeTrait(playerId, PlayerAbilitiesTrait)
-        J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
+        J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank"], current: 0, reload: 5 })
         return;
     }
 
@@ -466,7 +466,7 @@ function respawnPlayerAt(
     J.removeTrait(playerId, PlayerTrait)
     J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
     J.removeTrait(playerId, PlayerAbilitiesTrait)
-    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
+    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank"], current: 0, reload: 5 })
 }
 
 function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
@@ -484,7 +484,7 @@ function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
     J.removeTrait(playerId, PlayerTrait)
     J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
     J.removeTrait(playerId, PlayerAbilitiesTrait)
-    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
+    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank"], current: 0, reload: 5 })
 }
 
 function handleTimerStart(entityId: J.EntityId, playerId: J.EntityId, time: number) {
