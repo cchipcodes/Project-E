@@ -1,5 +1,5 @@
 import * as J from "jamango";
-import * as game from "../game";
+import * as abilities from "../game/abilities";
 import {
     AvatarOverrideTrait,
     ChainTrait,
@@ -303,7 +303,7 @@ function initializePlayer(playerId: J.EntityId) {
 
     if (!J.getTrait(playerId, PlayerAbilitiesTrait)) {
         J.setTrait(playerId, PlayerAbilitiesTrait, {
-            abilities: ["Blank", "King"],
+            abilities: ["Blank", "King", "Joker"],
             current: 0,
             reload: 5,
         });
@@ -449,7 +449,7 @@ function respawnPlayerAt(
         J.removeTrait(playerId, PlayerTrait)
         J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
         J.removeTrait(playerId, PlayerAbilitiesTrait)
-        J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King"], current: 0, reload: 5 })
+        J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
         return;
     }
 
@@ -466,7 +466,7 @@ function respawnPlayerAt(
     J.removeTrait(playerId, PlayerTrait)
     J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
     J.removeTrait(playerId, PlayerAbilitiesTrait)
-    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King"], current: 0, reload: 5 })
+    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
 }
 
 function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
@@ -484,7 +484,7 @@ function respawnPlayerAtWorldSpawn(playerId: J.EntityId) {
     J.removeTrait(playerId, PlayerTrait)
     J.setTrait(playerId, PlayerTrait, { score: 0, health: 100 });
     J.removeTrait(playerId, PlayerAbilitiesTrait)
-    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King"], current: 0, reload: 5 })
+    J.setTrait(playerId, PlayerAbilitiesTrait, { abilities: ["Blank", "King", "Joker"], current: 0, reload: 5 })
 }
 
 function handleTimerStart(entityId: J.EntityId, playerId: J.EntityId, time: number) {
@@ -1080,7 +1080,7 @@ function handleZombieTouch(entityId: J.EntityId, playerId: J.EntityId, time: num
     if (time - lastAttack < trait.damageCooldownSeconds) return;
 
     lastZombieAttackAt.set(key, time);
-    game.damagePlayer(10, playerId, time);
+    abilities.damagePlayer(10, playerId, time);
 }
 
 function tickNPCLookAt(time: number) {

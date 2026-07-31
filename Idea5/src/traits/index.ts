@@ -1222,7 +1222,7 @@ export const LootCardTrait = J.defineTrait(
     S.object({
         card: S.string({ label: "Card", control: "select", options:[
             { value: "Reverse", label: "Reverse Card" },
-            { value: "Queen", label: "Queen of Hearts Card" },
+            { value: "Hearts", label: "Hearts Card" },
             { value: "Rebound", label: "Rebound Card" },
             { value: "Movement", label: "Movement Upgrade" },
             { value: "Attack", label: "Attack Upgrade" },
@@ -1259,5 +1259,39 @@ export const BattleZoneTrait = J.defineTrait(
         color: "#ffff",
     },
 );
+
+export const KingCardTrait = J.defineTrait(
+    "kingCard",
+    S.object({}),
+    {
+        name: "King Card",
+        description: "Kills King",
+        icon: "🤴",
+        color: "#0800ff",
+    },
+);
+
+export const HeartsCardTrait = J.defineTrait(
+    "heartsCard",
+    S.object({}),
+    {
+        name: "Hearts Card",
+        description: "Stuns Queen for 10 seconds",
+        icon: "♥️",
+        color: "#d20000",
+    },
+);
+
+export const JokerCardTrait = J.defineTrait(
+    "jokerCard",
+    S.object({}),
+    {
+        name: "Joker Card",
+        description: "Stuns Rook for 10 seconds",
+        icon: "🃏",
+        color: "#00ff73",
+    },
+);
+
 
 export const DEFAULT_TIME_LEADERBOARD = "template_best_times_v1";
