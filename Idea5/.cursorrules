@@ -115,7 +115,7 @@ myButton.addEventListener("pointerdown", () => useAbility()); // mobile UI butto
 - Movement is client-sided. addEntityVelocity or setEntityVelocity for characters should happen on client.
 - Use areas for collision detection, not manual distance checks in onGameTick.
 - Persistent data: per-player-per-world. Play mode and edit mode have SEPARATE storage.
-- Visual offset/quaternion/scale (setEntityVisualOffset etc.) are cosmetic only — separate from physics.
+- Visual offset/quaternion/scale and setEntityOutline are client-only cosmetics separate from physics.
 
 ## Camera
 - Use the default Jamango camera where possible. setLocalPlayerCamera configures modes (firstPerson/thirdPerson/selfie). setCameraFree() can detach for cinematics but is experimental.
@@ -125,7 +125,7 @@ myButton.addEventListener("pointerdown", () => useAbility()); // mobile UI butto
 
 ## Key API (see docs.md for full reference)
 - Lifecycle: onGameStart, onGameTick, onGameRender, onPlayerJoin, onPlayerLeave
-- Entities: spawnProp, spawnCharacter, removeEntity, getEntityPosition, setEntityPosition
+- Entities: spawnProp, spawnCharacter, removeEntity, getEntityPosition, setEntityPosition, setEntityOutline
 - Traits: defineTrait, setTrait, getTrait, getAllWithTraits
 - Commands: net.defineCommand, net.send, net.sendToAll, net.listen
 - Physics: setEntityVelocity, addEntityImpulse, raycast, spawnBoxArea, spawnSphereArea
