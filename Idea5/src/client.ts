@@ -6,9 +6,11 @@ import { initVehicleSystem } from "./shared/vehicle";
 import * as game from "./game/game"
 
 if (J.net.isClient) {
-    initClientSystems();
-    initVehicleSystem();
-    initVehicleUI();
-    game.HUD();
-    game.gameClientTasks();
+    J.onGameStart(() => {
+        game.HUD();
+        game.gameClientTasks();
+        initClientSystems();
+        initVehicleSystem();
+        initVehicleUI();
+    });
 }
