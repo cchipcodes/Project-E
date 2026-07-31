@@ -6,9 +6,10 @@ export const ShowNotificationCommand = J.net.defineCommand<{
     sound?: string;
 }>("template-show-notification");
 
-export const EnemyDeathCommand = J.net.defineCommand<{
+export const EmitParticleCommand = J.net.defineCommand<{
     position: J.Vec3;
-}>("enemy-killed");
+    particleId: string;
+}>("emit-particle");
 
 export const PlayerAbilitySwitchCommand = J.net.defineCommand<{
     player: J.EntityId;

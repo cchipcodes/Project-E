@@ -12,8 +12,5 @@ if (J.net.isHost) {
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  game.damageEnemy();
-  game.playerAttacked();
-  game.abilitySwitch();
-  game.interactWithUpgrade();
+  game.gameServerTasks();
 };

@@ -21,6 +21,15 @@ const MOVEMENT_SPEEDS = [
     9
 ];
 
+const UPGRADE_CARDS = [
+    "Attack",
+    "Movement",
+    "Queen",
+    "Rebound",
+    "Joker",
+    "Reverse"
+];
+
 const ATTACK_SPEEDS = [
     5,
     4.75,
@@ -30,6 +39,34 @@ const ATTACK_SPEEDS = [
 ];
 
 //Server Functions
+export function gameServerTasks() {
+    spawnLoot();
+    damageEnemy();
+    interactWithUpgrade();
+    damageEnemy();
+};
+
+export function spawnLoot() {
+    J.onEntityCollisionStart({ source: [traits.PlayerTrait], target: [traits.ChestTrait] }, (_, chest) => {
+        let x = 3;
+        const chestPos = J.getEntityPosition(chest);
+        while (x > 0) {
+            const chosenCard = UPGRADE_CARDS[randomIntFromInterval(0, UPGRADE_CARDS.length - 1)]
+            const loot = J.spawnProp(J.assets.props["New Prop"].id);
+            J.setEntityPosition(loot, [chestPos[0] - randomIntFromInterval(3,5), chestPos[1] + 5, chestPos[2] + randomIntFromInterval(-5, 5)], false);
+            J.setTrait(loot, traits.LootCardTrait, {
+                card: chosenCard
+            });
+            J.updatePropPhysicsProperties(loot, {
+                motionType: J.MOTION_TYPE_DYNAMIC
+            });
+            x = x - 1;
+            const lootPos = J.getEntityPosition(loot);
+        };
+        J.removeEntity(chest);
+    });
+};
+
 export function interactWithUpgrade() {
     J.onEntityCollisionStart({ source:[traits.PlayerTrait], target: [traits.LootCardTrait]}, (plr, loot) => {
         const playerAbilities = J.getTrait(plr, traits.PlayerAbilitiesTrait);
@@ -82,7 +119,7 @@ export function interactWithUpgrade() {
             J.removeEntity(loot);
         };
     });
-}
+};
 
 export function damageEnemy() {
     //blank
@@ -101,7 +138,10 @@ export function damageEnemy() {
             J.characterJump(enemy, 10, true, false);
             currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
             if (currentHealth <= 0) {
-                J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
+                J.net.sendToAll(commands.EmitParticleCommand, {
+                    position: J.getEntityPosition(enemy), 
+                    particleId: J.assets.particles.Bang.id
+                });
                 J.removeEntity(enemy);   
             };
         };
@@ -127,7 +167,10 @@ export function damageEnemy() {
             J.characterJump(enemy, 10, true, false);
             currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
             if (currentHealth <= 0) {
-                J.net.sendToAll(commands.EnemyDeathCommand, {position: J.getEntityPosition(enemy)});
+                J.net.sendToAll(commands.EmitParticleCommand, {
+                    position: J.getEntityPosition(enemy), 
+                    particleId: J.assets.particles.Bang.id
+                });
                 J.removeEntity(enemy);   
             };
         };
@@ -303,13 +346,15 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                     },
                 },
             });
+            break;
+        case "King":
         }
 };
 
 //Client Functions
 export function gameClientTasks() {
-    J.net.listen(commands.EnemyDeathCommand, (data) => {
-        const particles = J.spawnParticles(J.assets.particles.Bang.id);
+    J.net.listen(commands.EmitParticleCommand, (data) => {
+        const particles = J.spawnParticles(data.particleId);
         J.setEntityPosition(particles, data.position, false);
     });
     abilitySwitch();
@@ -381,4 +426,12 @@ export function abilitySwitch() {
             switchCard(ent.player);
         });
     };
+};
+
+// Source - https://stackoverflow.com/a/7228322
+// Posted by Francisc, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-07-31, License - CC BY-SA 4.0
+
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
