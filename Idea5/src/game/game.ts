@@ -22,7 +22,7 @@ const MOVEMENT_SPEEDS = [
 ];
 
 const UPGRADE_CARDS = [
-    "Attack",
+    "Reload",
     "Movement",
     "Hearts",
     "Rebound",
@@ -88,7 +88,7 @@ export function interactWithUpgrade() {
                 durationSeconds: 3
             }, plr);
             J.removeEntity(loot);
-        } else if (lootCard.card == "Attack") {
+        } else if (lootCard.card == "Reload") {
             let next = 0
             for (let i in ATTACK_SPEEDS) {
                 if (playerAbilities.reload == ATTACK_SPEEDS[i]) {
