@@ -124,19 +124,37 @@ export function wait(seconds: number, callback: () => void) {
   let startTime: number | null = null;
   let finished = false;
 
-  J.onGameTick((_, time) => {
-    if (finished) return;
+    if (J.net.isHost) {
+        J.onGameTick((_, time) => {
+            if (finished) return;
 
-    if (startTime === null) {
-      startTime = time;
-      return;
-    }
+            if (startTime === null) {
+            startTime = time;
+            return;
+            }
 
-    if (time - startTime >= seconds) {
-      finished = true;
-      callback();
-    }
-  });
+            if (time - startTime >= seconds) {
+            finished = true;
+            callback();
+            }
+        });
+    };
+
+    if (J.net.isClient) {
+        J.onGameRender((_, time) => {
+            if (finished) return;
+
+            if (startTime === null) {
+            startTime = time;
+            return;
+            }
+
+            if (time - startTime >= seconds) {
+            finished = true;
+            callback();
+            }
+        });
+    };
 }
 
 
