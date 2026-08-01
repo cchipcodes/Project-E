@@ -217,12 +217,12 @@ function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
 
 function updateSpeedUI(plr: J.EntityId, ui: HTMLDivElement) {
     const speed = J.getCharacterMovementProperties(plr).walkSpeed;
-    hudkit.setText(ui, `Speed: ${String(speed)}`);
+    hudkit.setText(ui, String(speed));
 };
 
 function updateCooldownUI(plr: J.EntityId, ui: HTMLDivElement) {
     const cd = J.getTrait(plr, traits.PlayerAbilitiesTrait).reload;
-    hudkit.setText(ui, `Reload: ${String(cd)}`);
+    hudkit.setText(ui, String(cd));
 };
 
 function updateAbilityUI(plr: J.EntityId, ui: HTMLDivElement) {
