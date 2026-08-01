@@ -53,6 +53,7 @@ export function gameServerTasks() {
     interactWithUpgrade();
     abilities.damageEnemy();
     abilitySwitch();
+    abilities.playerAttacked();
 };
 
 export function spawnLoot() {
