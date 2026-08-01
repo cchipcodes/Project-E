@@ -3,6 +3,7 @@ import * as traits from "../traits/index";
 import * as server from "../server/systems";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
+import { activateBeacon } from "./game";
 
 export function damageEnemy() {
     //blank
@@ -74,8 +75,12 @@ export function damageEnemy() {
     });
     //king
     J.onEntityCollisionStart({source: [traits.KingCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
+        const trait = J.getTrait(enemy, traits.EnemyTrait);
         J.removeEntity(proj);
-        J.removeEntity(enemy);
+        if (trait.type == "King") {
+            J.removeEntity(enemy);
+            activateBeacon();
+        };
     });
     //joker
     J.onEntityCollisionStart({source: [traits.JokerCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {

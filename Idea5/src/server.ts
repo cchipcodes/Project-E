@@ -4,7 +4,6 @@ import { setInitialMovementSettings } from "./config";
 import { initServerSystems } from "./server/systems";
 import { initVehicleSystem } from "./shared/vehicle";
 import * as game from "./game/game";
-import * as utils from "./shared/utils";
 
 if (J.net.isHost) {
   initServerSystems();

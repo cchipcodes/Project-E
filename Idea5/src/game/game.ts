@@ -3,15 +3,21 @@ import * as traits from "../traits/index";
 import * as abilities from "./abilities";
 import * as hudkit from "../client/hud-kit";
 import * as commands from "../shared/commands";
+import { wait } from "../shared/utils";
 
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
 let abilityUI: HTMLDivElement | undefined;
 let statUI: HTMLDivElement | undefined;
+let beaconUI: HTMLDivElement | undefined;
 let healthCounter: HTMLDivElement | undefined;
 let currentAbility: HTMLDivElement | undefined;
 let speedCounter: HTMLDivElement | undefined;
 let cooldownCounter: HTMLDivElement | undefined;
+let activeBeaconCounter: HTMLDivElement | undefined;
+let abilityBtn: HTMLButtonElement | undefined;
+let serverBeaconCount: number | undefined;
+let maxServerBeacons: number | undefined;
 
 const MOVEMENT_SPEEDS = [
     6,
@@ -41,6 +47,8 @@ const ATTACK_SPEEDS = [
 
 //Server Functions
 export function gameServerTasks() {
+    serverBeaconCount = 0;
+    maxServerBeacons = undefined;
     spawnLoot();
     interactWithUpgrade();
     abilities.damageEnemy();
@@ -81,7 +89,7 @@ export function interactWithUpgrade() {
                     next = MOVEMENT_SPEEDS[Number(index) + 1];
                 };
             };
-            if (next == MOVEMENT_SPEEDS[-1]) { return };
+            if (next == MOVEMENT_SPEEDS[-1]) return;
             J.setCharacterMovementProperties(plr, { walkSpeed: next });
             J.net.send(commands.ShowNotificationCommand, {
                 message: "Movement Upgrade Obtained!",
@@ -95,7 +103,7 @@ export function interactWithUpgrade() {
                     next = ATTACK_SPEEDS[Number(i) + 1];
                 };
             };
-            if (next == ATTACK_SPEEDS[-1]) { return };
+            if (next == ATTACK_SPEEDS[-1]) return;
             J.removeTrait(plr, traits.PlayerAbilitiesTrait);
             J.setTrait(plr, traits.PlayerAbilitiesTrait, {
                 abilities: playerAbilities.abilities,
@@ -103,7 +111,7 @@ export function interactWithUpgrade() {
                 reload: next
             });
             J.net.send(commands.ShowNotificationCommand, {
-                message: "Attack Upgrade Obtained!",
+                message: "Reload Upgrade Obtained!",
                 durationSeconds: 3
             }, plr);
             J.removeEntity(loot)
@@ -128,23 +136,61 @@ export function interactWithUpgrade() {
     });
 };
 
+export function activateBeacon() {
+    serverBeaconCount = serverBeaconCount + 1;
+    if (serverBeaconCount == maxServerBeacons) {
+        J.net.sendToAll(commands.ShowNotificationCommand, {
+            message: "All Beacons Destroyed, Congratulations!",
+            durationSeconds: 10
+        });
+        wait(10, () => {
+            J.restartGame();
+        });
+    };
+};
+
 //Client Functions
 export function gameClientTasks() {
     J.net.listen(commands.EmitParticleCommand, (data) => {
         const particles = J.spawnParticles(data.particleId);
         J.setEntityPosition(particles, data.position, false);
     });
-    abilitySwitch();
+    J.onEntityCollisionStart({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+        abilityBtn.addEventListener("pointerdown", () => {
+            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
+            updateAbilityUI(plr, currentAbility);
+        });
+        abilitySwitch();
+    });
+    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+        const playerAbilities = J.getTrait(plr, traits.PlayerAbilitiesTrait);
+        abilityBtn.removeEventListener("pointerdown", () => {});
+        J.removeTrait(plr, traits.PlayerAbilitiesTrait);
+        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
+            abilities: playerAbilities.abilities,
+            current: 0,
+            reload: playerAbilities.reload,
+        });
+        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
+        J.removeTrait(plr, traits.HeldItemTrait);
+        resetAbilityUI(currentAbility);
+    });
 };
 
 export function HUD() {
     const plr = J.getLocalPlayer();
     J.onGameStart(() => {
+        //Beacons HUD Panel
+        beaconUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-top")}`);
+        hudkit.createText(beaconUI, "jt-label", "Beacons Active");
+        activeBeaconCounter = hudkit.createText(beaconUI, "jt-value", "NULL");
         //Stats HUD Panel
         statUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle")}`);
         hudkit.createText(statUI, "jt-label", "Stats");
-        speedCounter = hudkit.createText(statUI, "jt-value", `Speed: NULL`);
-        cooldownCounter = hudkit.createText(statUI, "jt-value", `Reload: NULL`);
+        hudkit.createText(statUI, "jt-label", "Movement Speed");
+        speedCounter = hudkit.createText(statUI, "jt-value", `NULL`);
+        hudkit.createText(statUI, "jt-label", "Reload Speed");
+        cooldownCounter = hudkit.createText(statUI, "jt-value", `NULL`);
         //Health HUD Panel
         healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
         hudkit.createText(healthUI, "jt-label", "Health")
@@ -153,13 +199,9 @@ export function HUD() {
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
         hudkit.createText(abilityUI, "jt-label", "Card");
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
-        const abilityBtn = document.createElement("button");
+        abilityBtn = document.createElement("button");
         abilityBtn.textContent = "⚡";
         abilityBtn.style.cssText = "position:absolute;bottom:80px;right:16px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
-        abilityBtn.addEventListener("pointerdown", () => {
-            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
-            updateAbilityUI(plr, currentAbility);
-        });
         J.uiElement?.appendChild(abilityBtn);
     });
     J.onGameRender(() => {
@@ -183,12 +225,15 @@ function updateCooldownUI(plr: J.EntityId, ui: HTMLDivElement) {
     hudkit.setText(ui, `Reload: ${String(cd)}`);
 };
 
-
 function updateAbilityUI(plr: J.EntityId, ui: HTMLDivElement) {
     const trait = J.getTrait(plr, traits.PlayerAbilitiesTrait);
     const i = trait.current;
     const active = trait.abilities[i];
     hudkit.setText(ui, active);
+};
+
+function resetAbilityUI(ui: HTMLDivElement) {
+    hudkit.setText(ui, "None");
 };
 
 // Shared Functions
