@@ -54,10 +54,10 @@ export function gameServerTasks() {
     abilities.damageEnemy();
     //abilitySwitch();
     abilities.playerAttacked();
-    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, () =>{
         abilitySwitch();
     });
-    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, _) =>{
         J.removeTrait(plr, traits.ProjectileSpawnerTrait);
         J.removeTrait(plr, traits.HeldItemTrait);
         resetAbilityUI(currentAbility);
@@ -149,7 +149,7 @@ export function activateBeacon() {
     serverBeaconCount = serverBeaconCount + 1;
     if (serverBeaconCount == maxServerBeacons) {
         J.net.sendToAll(commands.ShowNotificationCommand, {
-            message: "All Beacons Destroyed, Congratulations!",
+            message: "All Beacons Activated, Congratulations!",
             durationSeconds: 10
         });
         wait(10, () => {
@@ -169,6 +169,8 @@ export function gameClientTasks() {
             J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
             updateAbilityUI(plr, currentAbility);
         });
+    });
+    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, () =>{
         abilitySwitch();
     });
     J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
@@ -180,9 +182,6 @@ export function gameClientTasks() {
             current: 0,
             reload: playerAbilities.reload,
         });
-        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
-        J.removeTrait(plr, traits.HeldItemTrait);
-        resetAbilityUI(currentAbility);
     });
 };
 
