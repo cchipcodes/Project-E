@@ -1250,17 +1250,6 @@ export const ChestTrait = J.defineTrait(
     },
 );
 
-export const BattleZoneTrait = J.defineTrait(
-    "battleZone",
-    S.object({}),
-    {
-        name: "Battle Zone",
-        description: "Creates an area where abilities activate",
-        icon: "⚔️",
-        color: "#ffff",
-    },
-);
-
 export const KingCardTrait = J.defineTrait(
     "kingCard",
     S.object({}),
