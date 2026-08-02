@@ -260,7 +260,7 @@ export function abilityDisable() {
             J.setTrait(data.player, traits.PlayerAbilitiesTrait, {
                 abilities: abilityTrait.abilities,
                 reload: abilityTrait.reload,
-                current: abilityTrait.abilities.length
+                current: 0
             });
         });
     };
