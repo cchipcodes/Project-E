@@ -237,7 +237,7 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                 },
             });
             break;
-        case "Rebound":
+        case "Impulse":
             J.setTrait(plr, traits.HeldItemTrait, {
                 enabled: true,
                 firstPerson: true,

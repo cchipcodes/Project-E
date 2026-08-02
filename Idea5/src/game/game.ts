@@ -31,7 +31,7 @@ const UPGRADE_CARDS = [
     "Reload",
     "Movement",
     "Hearts",
-    "Rebound",
+    "Impulse",
     "Joker",
     "Reverse",
     "King",
