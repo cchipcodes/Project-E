@@ -52,8 +52,16 @@ export function gameServerTasks() {
     spawnLoot();
     interactWithUpgrade();
     abilities.damageEnemy();
-    abilitySwitch();
+    //abilitySwitch();
     abilities.playerAttacked();
+    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+        abilitySwitch();
+    });
+    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
+        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
+        J.removeTrait(plr, traits.HeldItemTrait);
+        resetAbilityUI(currentAbility);
+    });
 };
 
 export function spawnLoot() {
@@ -61,7 +69,7 @@ export function spawnLoot() {
         let x = 3;
         const chestPos = J.getEntityPosition(chest);
         while (x > 0) {
-            const chosenCard = UPGRADE_CARDS[randomIntFromInterval(0, UPGRADE_CARDS.length - 1)]
+            const chosenCard = UPGRADE_CARDS[randomIntFromInterval(0, UPGRADE_CARDS.length - 1)];
             const loot = J.spawnProp(J.assets.props["New Prop"].id);
             J.setEntityPosition(loot, [chestPos[0] - randomIntFromInterval(3,5), chestPos[1] + 5, chestPos[2] + randomIntFromInterval(-5, 5)], false);
             J.setTrait(loot, traits.LootCardTrait, {
@@ -184,7 +192,7 @@ export function HUD() {
         //Beacons HUD Panel
         beaconUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-top")}`);
         hudkit.createText(beaconUI, "jt-label", "Beacons Active");
-        activeBeaconCounter = hudkit.createText(beaconUI, "jt-value", "NULL");
+        activeBeaconCounter = hudkit.createText(beaconUI, "jt-value", "0");
         //Stats HUD Panel
         statUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle")}`);
         hudkit.createText(statUI, "jt-label", "Stats");
