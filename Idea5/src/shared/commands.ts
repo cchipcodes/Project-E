@@ -15,6 +15,11 @@ export const PlayerAbilitySwitchCommand = J.net.defineCommand<{
     player: J.EntityId;
 }>("player-ability-switch");
 
+export const PlayerAbilityEndCommand = J.net.defineCommand<{
+    player: J.EntityId;
+}>("player-ability-end");
+
+
 export const PlayLocalSoundCommand = J.net.defineCommand<{
     sound: string;
     volume?: number;

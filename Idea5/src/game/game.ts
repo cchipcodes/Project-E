@@ -52,16 +52,9 @@ export function gameServerTasks() {
     spawnLoot();
     interactWithUpgrade();
     abilities.damageEnemy();
-    //abilitySwitch();
+    abilitySwitch();
+    abilityDisable();
     abilities.playerAttacked();
-    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, () =>{
-        abilitySwitch();
-    });
-    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, _) =>{
-        J.removeTrait(plr, traits.ProjectileSpawnerTrait);
-        J.removeTrait(plr, traits.HeldItemTrait);
-        resetAbilityUI(currentAbility);
-    });
 };
 
 export function spawnLoot() {
@@ -164,25 +157,8 @@ export function gameClientTasks() {
         const particles = J.spawnParticles(data.particleId);
         J.setEntityPosition(particles, data.position, false);
     });
-    J.onEntityCollisionStart({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
-        abilityBtn.addEventListener("pointerdown", () => {
-            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
-            updateAbilityUI(plr, currentAbility);
-        });
-    });
-    J.onEntityCollisionPersisted({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, () =>{
-        abilitySwitch();
-    });
-    J.onEntityCollisionEnd({ source: [traits.PlayerTrait], target: [traits.BattleZoneTrait]}, (plr, zone) =>{
-        const playerAbilities = J.getTrait(plr, traits.PlayerAbilitiesTrait);
-        abilityBtn.removeEventListener("pointerdown", () => {});
-        J.removeTrait(plr, traits.PlayerAbilitiesTrait);
-        J.setTrait(plr, traits.PlayerAbilitiesTrait, {
-            abilities: playerAbilities.abilities,
-            current: 0,
-            reload: playerAbilities.reload,
-        });
-    });
+    abilitySwitch();
+    abilityDisable();
 };
 
 export function HUD() {
@@ -258,10 +234,34 @@ export function abilitySwitch() {
             J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
             updateAbilityUI(plr, currentAbility);
         });
-    }
+    };
     if (J.net.isHost) {
         J.net.listen(commands.PlayerAbilitySwitchCommand, (ent) => {
             abilities.switchCard(ent.player);
+        });
+    };
+};
+
+export function abilityDisable() {
+    if (J.net.isClient) {
+        const plr = J.getLocalPlayer();
+        J.onControlPress("KeyQ", (playerId) => {
+            if (playerId !== plr) return;
+            resetAbilityUI(currentAbility);
+            J.net.send(commands.PlayerAbilityEndCommand, { player: plr });
+        });
+    };
+    if (J.net.isHost) {
+        J.net.listen(commands.PlayerAbilityEndCommand, (data) => {
+            const abilityTrait = J.getTrait(data.player, traits.PlayerAbilitiesTrait);
+            J.removeTrait(data.player, traits.ProjectileSpawnerTrait);
+            J.removeTrait(data.player, traits.HeldItemTrait);
+            J.removeTrait(data.player, traits.PlayerAbilitiesTrait);
+            J.setTrait(data.player, traits.PlayerAbilitiesTrait, {
+                abilities: abilityTrait.abilities,
+                reload: abilityTrait.reload,
+                current: abilityTrait.abilities.length
+            });
         });
     };
 };
