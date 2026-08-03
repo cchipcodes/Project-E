@@ -63,7 +63,7 @@ export function spawnLoot() {
         const chestPos = J.getEntityPosition(chest);
         while (x > 0) {
             const chosenCard = UPGRADE_CARDS[randomIntFromInterval(0, UPGRADE_CARDS.length - 1)];
-            const loot = J.spawnProp(J.assets.props["New Prop"].id);
+            const loot = J.spawnProp(J.assets.props[`${chosenCard} Card`].id);
             J.setEntityPosition(loot, [chestPos[0] - randomIntFromInterval(3,5), chestPos[1] + 5, chestPos[2] + randomIntFromInterval(-5, 5)], false);
             J.setTrait(loot, traits.LootCardTrait, {
                 card: chosenCard

@@ -173,21 +173,21 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
         J.removeTrait(plr, traits.HeldItemTrait);
         J.removeTrait(plr, traits.ProjectileSpawnerTrait);
     };
+    J.setTrait(plr, traits.HeldItemTrait, {
+        enabled: true,
+        firstPerson: true,
+        source: {type: "prop", prop: J.assets.props[`${type} Card`].id},
+        slot: "handRight",
+        holdPose: J.assets.animations.items_oneHanded_idle_over.id,
+        position: [0,0,0],
+        fpPosition: [0.5,-0.7,-0.7],
+        rotation: [90,0,0],
+        fpRotation: [0,0,0],
+        scale: 0.2,
+        fpScale: 0.2
+    });
     switch(type) {
         case "Blank":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props[`${type} Card`].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 0.1,
-                fpScale: 0.1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
                 "projectile": J.assets.props[`${type} Card`].id,
@@ -206,22 +206,9 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
             });
             break;
         case "Reverse":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props["New Prop"].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 1,
-                fpScale: 1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
-                "projectile": J.assets.props["New Prop"].id,
+                "projectile": J.assets.props[`${type} Card`].id,
                 "killOnHit": false,
                 "direction": [0,0,1],
                 "speed": 90,
@@ -238,22 +225,9 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
             });
             break;
         case "Impulse":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props["New Prop"].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 1,
-                fpScale: 1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
-                "projectile": J.assets.props["New Prop"].id,
+                "projectile": J.assets.props[`${type} Card`].id,
                 "killOnHit": false,
                 "direction": [0,0,1],
                 "speed": 90,
@@ -276,22 +250,9 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
             });
             break;
         case "King":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props["New Prop"].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 1,
-                fpScale: 1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
-                "projectile": J.assets.props["New Prop"].id,
+                "projectile": J.assets.props[`${type} Card`].id,
                 "killOnHit": false,
                 "direction": [0,0,1],
                 "speed": 90,
@@ -305,22 +266,9 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
             });
             break;
         case "Hearts":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props["New Prop"].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 1,
-                fpScale: 1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
-                "projectile": J.assets.props["New Prop"].id,
+                "projectile": J.assets.props[`${type} Card`].id,
                 "killOnHit": false,
                 "direction": [0,0,1],
                 "speed": 90,
@@ -334,22 +282,9 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
             });
             break;
         case "Joker":
-            J.setTrait(plr, traits.HeldItemTrait, {
-                enabled: true,
-                firstPerson: true,
-                source: {type: "prop", prop: J.assets.props["New Prop"].id},
-                slot: "handRight",
-                holdPose: J.assets.animations.items_oneHanded_idle_over.id,
-                position: [0,0,0],
-                fpPosition: [0.5,-0.7,-0.7],
-                rotation: [0,0,0],
-                fpRotation: [0,0,0],
-                scale: 1,
-                fpScale: 1
-            });
             J.setTrait(plr, traits.ProjectileSpawnerTrait, {
                 "enabled": true,
-                "projectile": J.assets.props["New Prop"].id,
+                "projectile": J.assets.props[`${type} Card`].id,
                 "killOnHit": false,
                 "direction": [0,0,1],
                 "speed": 90,
