@@ -6,13 +6,12 @@ import { initVehicleSystem } from "./shared/vehicle";
 import * as game from "./game/game";
 
 if (J.net.isHost) {
-  initServerSystems();
-  initVehicleSystem();
-
   J.onGameStart(() => {
     game.gameServerTasks();
-  });
-  J.onPlayerJoin((playerId) => {
-    setInitialMovementSettings(playerId);
+    initServerSystems();
+    initVehicleSystem();
+    J.onPlayerJoin((playerId) => {
+      setInitialMovementSettings(playerId);
+    });
   });
 };
