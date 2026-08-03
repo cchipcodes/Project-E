@@ -153,12 +153,16 @@ export function activateBeacon() {
 
 //Client Functions
 export function gameClientTasks() {
+    const plr = J.getLocalPlayer();
+    J.setLocalPlayerCamera(["firstPerson", "thirdPerson"]);
+    J.setCharacterVisualFacingMode(plr, "camera");
     J.net.listen(commands.EmitParticleCommand, (data) => {
         const particles = J.spawnParticles(data.particleId);
         J.setEntityPosition(particles, data.position, false);
     });
     abilitySwitch();
     abilityDisable();
+    HUD();
 };
 
 export function HUD() {

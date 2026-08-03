@@ -7,7 +7,6 @@ import * as game from "./game/game"
 
 if (J.net.isClient) {
     J.onGameStart(() => {
-        game.HUD();
         game.gameClientTasks();
         initClientSystems();
         initVehicleSystem();
