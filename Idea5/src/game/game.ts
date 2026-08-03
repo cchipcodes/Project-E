@@ -47,7 +47,12 @@ const ATTACK_SPEEDS = [
 //Server Functions
 export function gameServerTasks() {
     serverBeaconCount = 0;
-    maxServerBeacons = undefined;
+    const allEnemies = J.getAllWithTraits([traits.EnemyTrait]);
+    for (let x of allEnemies) {
+        if (x[1].type == "King") {
+            maxServerBeacons = maxServerBeacons + 1;
+        };
+    };
     spawnLoot();
     interactWithUpgrade();
     abilities.damageEnemy();

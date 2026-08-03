@@ -78,8 +78,28 @@ export function damageEnemy() {
         const trait = J.getTrait(enemy, traits.EnemyTrait);
         J.removeEntity(proj);
         if (trait.type == "King") {
-            J.removeEntity(enemy);
-            activateBeacon();
+            const d = 100;
+            const Damage = J.getTrait(enemy, traits.EnemyTrait);
+            let currentHealth = Damage.health;
+            const enemyType = Damage.type;
+            J.removeTrait(enemy, traits.EnemyTrait);
+            J.setTrait(enemy, traits.EnemyTrait, {
+                health: currentHealth - d,
+                type: enemyType,
+            });
+            if (currentHealth > 0) {
+                J.clearCharacterMoveTarget(enemy);
+                J.characterJump(enemy, 10, true, false);
+                currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
+                if (currentHealth <= 0) {
+                    J.net.sendToAll(commands.EmitParticleCommand, {
+                        position: J.getEntityPosition(enemy), 
+                        particleId: J.assets.particles.Bang.id
+                    });
+                    J.removeEntity(enemy); 
+                    activateBeacon();  
+                };
+            };
         };
     });
     //joker
