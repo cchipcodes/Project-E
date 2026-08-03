@@ -4,6 +4,7 @@ import * as abilities from "./abilities";
 import * as hudkit from "../client/hud-kit";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
+import { max } from "jamango/math/vec3";
 
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
@@ -48,6 +49,7 @@ const ATTACK_SPEEDS = [
 export function gameServerTasks() {
     serverBeaconCount = 0;
     const allEnemies = J.getAllWithTraits([traits.EnemyTrait]);
+    maxServerBeacons = 0;
     for (let x of allEnemies) {
         if (x[1].type == "King") {
             maxServerBeacons = maxServerBeacons + 1;

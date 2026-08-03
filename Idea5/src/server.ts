@@ -9,8 +9,10 @@ if (J.net.isHost) {
   initServerSystems();
   initVehicleSystem();
 
+  J.onGameStart(() => {
+    game.gameServerTasks();
+  });
   J.onPlayerJoin((playerId) => {
     setInitialMovementSettings(playerId);
   });
-  game.gameServerTasks();
 };
