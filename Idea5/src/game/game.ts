@@ -15,7 +15,6 @@ let currentAbility: HTMLDivElement | undefined;
 let speedCounter: HTMLDivElement | undefined;
 let cooldownCounter: HTMLDivElement | undefined;
 let activeBeaconCounter: HTMLDivElement | undefined;
-let abilityBtn: HTMLButtonElement | undefined;
 let serverBeaconCount: number | undefined;
 let maxServerBeacons: number | undefined;
 
@@ -154,6 +153,7 @@ export function activateBeacon() {
 //Client Functions
 export function gameClientTasks() {
     const plr = J.getLocalPlayer();
+    
     J.setLocalPlayerCamera(["firstPerson", "thirdPerson"]);
     J.setCharacterVisualFacingMode(plr, "camera");
     J.net.listen(commands.EmitParticleCommand, (data) => {
@@ -187,10 +187,22 @@ export function HUD() {
         abilityUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("bottom-middle")}`);
         hudkit.createText(abilityUI, "jt-label", "Card");
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
-        abilityBtn = document.createElement("button");
+        const abilityBtn = document.createElement("button");
         abilityBtn.textContent = "⚡";
-        abilityBtn.style.cssText = "position:absolute;bottom:80px;right:16px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityBtn.style.cssText = "position:absolute;bottom:90px;right:16px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityBtn.addEventListener("pointerdown", () => {
+            J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
+            updateAbilityUI(plr, currentAbility);
+        });
         J.uiElement?.appendChild(abilityBtn);
+        const abilityDisableBtn = document.createElement("button");
+        abilityDisableBtn.textContent = "❌";
+        abilityDisableBtn.style.cssText = "position:absolute;bottom:60px;right:64px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityDisableBtn.addEventListener("pointerdown", () => {
+            resetAbilityUI(currentAbility);
+            J.net.send(commands.PlayerAbilityEndCommand, { player: plr });
+        });
+        J.uiElement?.appendChild(abilityDisableBtn);
     });
     J.onGameRender(() => {
         updateHealthUI(plr, healthCounter);
