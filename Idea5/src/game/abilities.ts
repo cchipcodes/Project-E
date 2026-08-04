@@ -115,7 +115,6 @@ export function damageEnemy() {
         
         J.removeTrait(enemy, traits.ProjectileSpawnerTrait);
         J.removeTrait(enemy, traits.NPCLookAtNearestPlayerTrait);
-        console.log("Stunned");
 
         wait(10, () => {
             J.setTrait(enemy, traits.ProjectileSpawnerTrait, projectileTrait);
@@ -124,11 +123,11 @@ export function damageEnemy() {
         });
     });
     //queen
-        J.onEntityCollisionStart({source: [traits.HeartsCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
+    J.onEntityCollisionStart({source: [traits.HeartsCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const enemyTrait = J.getTrait(enemy, traits.EnemyTrait);
         
         J.removeEntity(proj);
-        if (enemyTrait.type != "Rook") return;
+        if (enemyTrait.type != "Queen") return;
         
         const zombieTrait = J.getTrait(enemy, traits.ZombieTrait);
         
