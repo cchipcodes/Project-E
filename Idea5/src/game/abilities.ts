@@ -12,6 +12,7 @@ export function damageEnemy() {
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
         let currentHealth = Damage.health;
         const enemyType = Damage.type;
+        if (enemyType == "King") return;
         J.removeTrait(enemy, traits.EnemyTrait);
         J.setTrait(enemy, traits.EnemyTrait, {
             health: currentHealth - d,
