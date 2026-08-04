@@ -19,6 +19,11 @@ export const PlayerAbilityEndCommand = J.net.defineCommand<{
     player: J.EntityId;
 }>("player-ability-end");
 
+export const GetBeaconInfoCommand = J.net.defineCommand<{
+    current: number;
+    max: number;
+}>("get-server-beacon-info");
+
 
 export const PlayLocalSoundCommand = J.net.defineCommand<{
     sound: string;

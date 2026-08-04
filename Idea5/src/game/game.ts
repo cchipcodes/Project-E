@@ -4,7 +4,6 @@ import * as abilities from "./abilities";
 import * as hudkit from "../client/hud-kit";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
-import { max } from "jamango/math/vec3";
 
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
@@ -55,6 +54,10 @@ export function gameServerTasks() {
             maxServerBeacons = maxServerBeacons + 1;
         };
     };
+    J.net.sendToAll(commands.GetBeaconInfoCommand, {
+        current: serverBeaconCount,
+        max: maxServerBeacons
+    });
     spawnLoot();
     interactWithUpgrade();
     abilities.damageEnemy();
@@ -146,6 +149,10 @@ export function interactWithUpgrade() {
 
 export function activateBeacon() {
     serverBeaconCount = serverBeaconCount + 1;
+    J.net.sendToAll(commands.GetBeaconInfoCommand, {
+        current: serverBeaconCount,
+        max: maxServerBeacons
+    });
     if (serverBeaconCount == maxServerBeacons) {
         J.net.sendToAll(commands.ShowNotificationCommand, {
             message: "All Beacons Activated, Congratulations!",
@@ -211,6 +218,9 @@ export function HUD() {
         });
         J.uiElement?.appendChild(abilityDisableBtn);
     });
+    J.net.listen(commands.GetBeaconInfoCommand, (data) => {
+        updateBeaconUI(activeBeaconCounter, data.current, data.max);
+    });
     J.onGameRender(() => {
         updateHealthUI(plr, healthCounter);
         updateSpeedUI(plr, speedCounter);
@@ -225,6 +235,10 @@ function updateHealthUI(plr: J.EntityId, ui: HTMLDivElement) {
 function updateSpeedUI(plr: J.EntityId, ui: HTMLDivElement) {
     const speed = J.getCharacterMovementProperties(plr).walkSpeed;
     hudkit.setText(ui, String(speed));
+};
+
+function updateBeaconUI(ui: HTMLDivElement, c: number, i: number) {
+    hudkit.setText(ui, `${String(c)}/${String(i)}`);
 };
 
 function updateCooldownUI(plr: J.EntityId, ui: HTMLDivElement) {
