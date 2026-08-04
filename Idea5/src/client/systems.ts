@@ -675,7 +675,7 @@ function tickInteractPrompt() {
         ) {
             showWorldInteractPrompt(
                 targetPosition,
-                `💭\n${promptTitle(dialogueTrait.title, "Talk")}\nInteract to Talk`,
+                `💭\n${promptTitle(dialogueTrait.title, "Talk")}\n[Click] to Talk`,
                 2.4,
             );
             return;
