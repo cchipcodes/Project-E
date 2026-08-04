@@ -41,7 +41,7 @@ export function damageEnemy() {
         const plrTrait = J.getTrait(plr, traits.PlayerTrait);
         const playerHealth = plrTrait.health;
         const enemyType = Damage.type;
-
+        if (enemyType == "King") return;
         if (currentHealth > 0) {
             J.removeTrait(enemy, traits.EnemyTrait);
             J.setTrait(enemy, traits.EnemyTrait, {
