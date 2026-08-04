@@ -30,6 +30,10 @@ export function damageEnemy() {
                 J.removeEntity(enemy);   
             };
         };
+        J.net.sendToAll(commands.EmitParticleCommand, {
+            position: J.getEntityPosition(proj),
+            particleId: J.assets.particles["Bubble Pop"].id
+        });
         J.removeEntity(proj);
     });
     //reverse
