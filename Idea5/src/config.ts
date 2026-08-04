@@ -9,4 +9,8 @@ export function setInitialMovementSettings(playerId: J.EntityId) {
         canSprint: true,
         canCrouch: true,
     });
+    J.setPlayerPermissions(playerId, {
+        canFly: false,
+        canInteract: true
+    });
 }
