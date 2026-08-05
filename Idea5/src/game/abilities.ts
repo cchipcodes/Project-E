@@ -25,7 +25,7 @@ export function damageEnemy() {
             if (currentHealth <= 0) {
                 J.net.sendToAll(commands.EmitParticleCommand, {
                     position: J.getEntityPosition(enemy), 
-                    particleId: J.assets.particles.Bang.id
+                    particleId: J.assets.particles["Enemy Death"].id
                 });
                 J.removeEntity(enemy);   
             };
