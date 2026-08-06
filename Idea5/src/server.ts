@@ -10,8 +10,8 @@ if (J.net.isHost) {
     game.gameServerTasks();
     initServerSystems();
     initVehicleSystem();
-    J.onPlayerJoin((playerId) => {
-      setInitialMovementSettings(playerId);
-    });
+  });
+  J.onPlayerJoin((playerId) => {
+    setInitialMovementSettings(playerId);
   });
 };

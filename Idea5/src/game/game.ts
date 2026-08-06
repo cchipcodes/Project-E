@@ -4,6 +4,7 @@ import * as abilities from "./abilities";
 import * as hudkit from "../client/hud-kit";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
+import { command } from "./reset";
 
 // Constants and Variables
 let healthUI: HTMLDivElement | undefined;
@@ -159,7 +160,7 @@ export function activateBeacon() {
             durationSeconds: 10
         });
         wait(10, () => {
-            J.restartGame();
+            J.net.sendToAll(command, {});
         });
     };
 };
@@ -181,7 +182,6 @@ export function gameClientTasks() {
 
 export function HUD() {
     const plr = J.getLocalPlayer();
-    J.onGameStart(() => {
         //Beacons HUD Panel
         beaconUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-top")}`);
         hudkit.createText(beaconUI, "jt-label", "Beacons Active");
@@ -217,7 +217,6 @@ export function HUD() {
             J.net.send(commands.PlayerAbilityEndCommand, { player: plr });
         });
         J.uiElement?.appendChild(abilityDisableBtn);
-    });
     J.net.listen(commands.GetBeaconInfoCommand, (data) => {
         updateBeaconUI(activeBeaconCounter, data.current, data.max);
     });
