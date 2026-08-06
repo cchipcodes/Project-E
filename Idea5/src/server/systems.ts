@@ -1071,10 +1071,12 @@ function handleZombieTouch(entityId: J.EntityId, playerId: J.EntityId, time: num
 
     const key = `${entityId}:${playerId}`;
     const lastAttack = lastZombieAttackAt.get(key) ?? -1000;
+    const playerPos = J.getEntityPosition(playerId);
     if (time - lastAttack < trait.damageCooldownSeconds) return;
 
+
     lastZombieAttackAt.set(key, time);
-    abilities.damagePlayer(trait.damage, playerId, time);
+    abilities.damagePlayer(trait.damage, playerId, time, [playerPos[0], playerPos[1] + 0.5, playerPos[2]]);
 }
 
 function tickNPCLookAt(time: number) {

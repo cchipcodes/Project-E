@@ -127,7 +127,6 @@ export function damageEnemy() {
         wait(10, () => {
             J.setTrait(enemy, traits.ProjectileSpawnerTrait, projectileTrait);
             J.setTrait(enemy, traits.NPCLookAtNearestPlayerTrait, lookAtTrait);
-            console.log("Restored");
         });
     });
     //queen
@@ -150,12 +149,12 @@ export function damageEnemy() {
 export function playerAttacked() {
     J.onEntityCollisionStart({ source: [traits.PlayerDamageTrait], target: [traits.PlayerTrait] }, (proj, plr) => {
         const trait = J.getTrait(proj, traits.PlayerDamageTrait);
-        damagePlayer(trait.damage, plr, server.serverTime);
+        damagePlayer(trait.damage, plr, server.serverTime, J.getEntityPosition(proj));
         J.removeEntity(proj);
     });
 }
 
-export function damagePlayer(d: number, plr: J.EntityId, t: number) {
+export function damagePlayer(d: number, plr: J.EntityId, t: number, pos: J.Vec3) {
         const Damage = J.getTrait(plr, traits.PlayerTrait);
         let currentHealth = Damage.health;
         if (currentHealth > 0) {
@@ -163,6 +162,10 @@ export function damagePlayer(d: number, plr: J.EntityId, t: number) {
             J.setTrait(plr, traits.PlayerTrait, {
                 health: currentHealth - d,
                 score: Damage.score,
+            });
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: pos, 
+                particleId: J.assets.particles["Player Damage"].id
             });
             currentHealth = J.getTrait(plr, traits.PlayerTrait).health
             if (currentHealth <= 0) {
