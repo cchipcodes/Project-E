@@ -4,6 +4,7 @@ import * as server from "../server/systems";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
 import { activateBeacon } from "./game";
+import { entityId } from "jamango/schema";
 
 export function damageEnemy() {
     //blank
@@ -55,6 +56,10 @@ export function damageEnemy() {
             J.clearCharacterMoveTarget(enemy);
             J.characterJump(enemy, 10, true, false);
             currentHealth = J.getTrait(enemy, traits.EnemyTrait).health;
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(enemy), 
+                particleId: J.assets.particles["Damage Indicator"].id
+            });
             if (currentHealth <= 0) {
                 J.net.sendToAll(commands.EmitParticleCommand, {
                     position: J.getEntityPosition(enemy), 
@@ -70,6 +75,10 @@ export function damageEnemy() {
             J.setTrait(plr, traits.PlayerTrait, {
                 health: playerHealth + d,
                 score: plrTrait.score,
+            });
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(Number(plr) as J.EntityId), 
+                particleId: J.assets.particles["Reverse Player"].id
             });
         } else {
             J.setTrait(plr, traits.PlayerTrait, {
