@@ -99,7 +99,11 @@ export function damageEnemy() {
                 if (currentHealth <= 0) {
                     J.net.sendToAll(commands.EmitParticleCommand, {
                         position: J.getEntityPosition(enemy), 
-                        particleId: J.assets.particles.Bang.id
+                        particleId: J.assets.particles["Beacon Initialize"].id
+                    });
+                    J.net.sendToAll(commands.EmitParticleCommand, {
+                        position: J.getEntityPosition(enemy), 
+                        particleId: J.assets.particles["Beacon Beam"].id
                     });
                     J.removeEntity(enemy); 
                     activateBeacon();  
