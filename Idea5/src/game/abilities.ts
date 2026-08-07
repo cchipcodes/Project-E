@@ -90,7 +90,6 @@ export function damageEnemy() {
     //king
     J.onEntityCollisionStart({source: [traits.KingCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const trait = J.getTrait(enemy, traits.EnemyTrait);
-        J.removeEntity(proj);
         if (trait.type == "King") {
             const d = 100;
             const Damage = J.getTrait(enemy, traits.EnemyTrait);
@@ -118,15 +117,28 @@ export function damageEnemy() {
                     activateBeacon();  
                 };
             };
+        } else {
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(proj), 
+                particleId: J.assets.particles["Absorbed Attack"].id
+            });
         };
+        J.removeEntity(proj);
     });
     //joker
     J.onEntityCollisionStart({source: [traits.JokerCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const enemyTrait = J.getTrait(enemy, traits.EnemyTrait);
         
-        J.removeEntity(proj);
-        if (enemyTrait.type != "Rook") return;
         
+        if (enemyTrait.type != "Rook") {
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(proj), 
+                particleId: J.assets.particles["Absorbed Attack"].id
+            });
+            return;
+        };
+        J.removeEntity(proj);
+
         const projectileTrait = J.getTrait(enemy, traits.ProjectileSpawnerTrait);
         const lookAtTrait = J.getTrait(enemy, traits.NPCLookAtNearestPlayerTrait);
         
@@ -142,8 +154,14 @@ export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.HeartsCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const enemyTrait = J.getTrait(enemy, traits.EnemyTrait);
         
+        if (enemyTrait.type != "Queen") {
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(proj), 
+                particleId: J.assets.particles["Absorbed Attack"].id
+            });
+            return;
+        };
         J.removeEntity(proj);
-        if (enemyTrait.type != "Queen") return;
         
         const zombieTrait = J.getTrait(enemy, traits.ZombieTrait);
         
