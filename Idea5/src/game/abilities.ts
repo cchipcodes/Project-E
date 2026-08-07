@@ -11,6 +11,7 @@ export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.EnemyDamageTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const d = J.getTrait(proj, traits.EnemyDamageTrait).damage;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
+        if (!Damage) return;
         let currentHealth = Damage.health;
         const enemyType = Damage.type;
         if (enemyType == "King") return;
@@ -42,6 +43,7 @@ export function damageEnemy() {
         const d = J.getTrait(proj, traits.EnemyStealTrait).damage;
         const plr = J.getTrait(proj, traits.EnemyStealTrait).player;
         const Damage = J.getTrait(enemy, traits.EnemyTrait);
+        if (!Damage) return;
         let currentHealth = Damage.health;
         const plrTrait = J.getTrait(plr, traits.PlayerTrait);
         const playerHealth = plrTrait.health;
@@ -90,6 +92,7 @@ export function damageEnemy() {
     //king
     J.onEntityCollisionStart({source: [traits.KingCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const trait = J.getTrait(enemy, traits.EnemyTrait);
+        if (!trait) return;
         if (trait.type == "King") {
             const d = 100;
             const Damage = J.getTrait(enemy, traits.EnemyTrait);
@@ -129,7 +132,7 @@ export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.JokerCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const enemyTrait = J.getTrait(enemy, traits.EnemyTrait);
         
-        
+        if (!enemyTrait) return;
         if (enemyTrait.type != "Rook") {
             J.net.sendToAll(commands.EmitParticleCommand, {
                 position: J.getEntityPosition(proj), 
@@ -167,6 +170,7 @@ export function damageEnemy() {
     J.onEntityCollisionStart({source: [traits.HeartsCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const enemyTrait = J.getTrait(enemy, traits.EnemyTrait);
         
+        if (!enemy) return;
         if (enemyTrait.type != "Queen") {
             J.net.sendToAll(commands.EmitParticleCommand, {
                 position: J.getEntityPosition(proj), 
