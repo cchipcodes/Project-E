@@ -11,6 +11,13 @@ export const EmitParticleCommand = J.net.defineCommand<{
     particleId: string;
 }>("emit-particle");
 
+export const AddTempEntityOutline = J.net.defineCommand<{
+    entity: J.EntityId;
+    size: number;
+    colour: J.Vec4;
+    duration: number;
+}>("temporary-entity-outline");
+
 export const PlayerAbilitySwitchCommand = J.net.defineCommand<{
     player: J.EntityId;
 }>("player-ability-switch");

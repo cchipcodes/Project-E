@@ -151,6 +151,13 @@ export function damageEnemy() {
         J.removeTrait(enemy, traits.ProjectileSpawnerTrait);
         J.removeTrait(enemy, traits.NPCLookAtNearestPlayerTrait);
 
+        J.net.sendToAll(commands.AddTempEntityOutline, {
+            entity: enemy,
+            size: 0.035,
+            colour: [0,0,1,1],
+            duration: 10
+        });
+
         wait(10, () => {
             J.setTrait(enemy, traits.ProjectileSpawnerTrait, projectileTrait);
             J.setTrait(enemy, traits.NPCLookAtNearestPlayerTrait, lookAtTrait);
@@ -178,6 +185,13 @@ export function damageEnemy() {
         const zombieTrait = J.getTrait(enemy, traits.ZombieTrait);
         
         J.removeTrait(enemy, traits.ZombieTrait);
+
+        J.net.sendToAll(commands.AddTempEntityOutline, {
+            entity: enemy,
+            size: 0.035,
+            colour: [0,0,1,1],
+            duration: 10
+        });
 
         wait(10, () => {
             J.setTrait(enemy, traits.ZombieTrait, zombieTrait);
