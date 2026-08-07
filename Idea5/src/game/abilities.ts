@@ -4,7 +4,6 @@ import * as server from "../server/systems";
 import * as commands from "../shared/commands";
 import { wait } from "../shared/utils";
 import { activateBeacon } from "./game";
-import { entityId } from "jamango/schema";
 
 export function damageEnemy() {
     //blank
@@ -92,13 +91,19 @@ export function damageEnemy() {
     //king
     J.onEntityCollisionStart({source: [traits.KingCardTrait], target: [traits.EnemyTrait]}, (proj, enemy) => {
         const trait = J.getTrait(enemy, traits.EnemyTrait);
+        const d = 100;
+        const Damage = J.getTrait(enemy, traits.EnemyTrait);
+        let currentHealth = Damage.health;
+        const enemyType = Damage.type;
         if (!trait) return;
-        if (trait.type == "King") {
-            const d = 100;
-            const Damage = J.getTrait(enemy, traits.EnemyTrait);
-            let currentHealth = Damage.health;
-            const enemyType = Damage.type;
-            J.removeTrait(enemy, traits.EnemyTrait);
+        if (trait.type != "King") {
+            J.net.sendToAll(commands.EmitParticleCommand, {
+                position: J.getEntityPosition(proj), 
+                particleId: J.assets.particles["Absorbed Attack"].id
+            });
+        return;
+        };
+        J.removeTrait(enemy, traits.EnemyTrait);
             J.setTrait(enemy, traits.EnemyTrait, {
                 health: currentHealth - d,
                 type: enemyType,
@@ -124,12 +129,6 @@ export function damageEnemy() {
                     activateBeacon();  
                 };
             };
-        } else {
-            J.net.sendToAll(commands.EmitParticleCommand, {
-                position: J.getEntityPosition(proj), 
-                particleId: J.assets.particles["Absorbed Attack"].id
-            });
-        };
         J.removeEntity(proj);
     });
     //joker
