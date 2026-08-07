@@ -137,6 +137,12 @@ export function damageEnemy() {
             });
             return;
         };
+
+        J.net.sendToAll(commands.EmitParticleCommand, {
+            position: J.getEntityPosition(proj), 
+            particleId: J.assets.particles["Joker Stun"].id
+        });
+
         J.removeEntity(proj);
 
         const projectileTrait = J.getTrait(enemy, traits.ProjectileSpawnerTrait);
@@ -161,6 +167,12 @@ export function damageEnemy() {
             });
             return;
         };
+
+        J.net.sendToAll(commands.EmitParticleCommand, {
+            position: J.getEntityPosition(proj), 
+            particleId: J.assets.particles["Hearts Stun"].id
+        });
+
         J.removeEntity(proj);
         
         const zombieTrait = J.getTrait(enemy, traits.ZombieTrait);
