@@ -175,15 +175,27 @@ export function gameClientTasks() {
         const particles = J.spawnParticles(data.particleId);
         J.setEntityPosition(particles, data.position, false);
     });
-    abilitySwitch();
-    abilityDisable();
-    HUD();
     J.net.listen(commands.AddTempEntityOutline, (data) => {
         J.setEntityOutline(data.entity, data.size, data.colour);
         wait(data.duration, () => {
             J.setEntityOutline(data.entity, 0, [0,0,0,0]);
         });
     });
+
+    particleEmission();
+    abilitySwitch();
+    abilityDisable();
+    HUD();
+};
+
+function particleEmission() {
+    const allEntities = J.getAllWithTraits([traits.ParticleEmissionTrait]);
+    for (let ent of allEntities) {
+        const trait = J.getTrait(ent[0], traits.ParticleEmissionTrait);
+        const entPos = J.getEntityPosition(ent[0]);
+        const entParticles = J.spawnParticles(trait.asset);
+        J.setEntityPosition(entParticles, entPos, false);
+    };
 };
 
 export function HUD() {

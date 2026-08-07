@@ -14,6 +14,9 @@ const audioAsset = (label: string) =>
 const animationAsset = (label: string, optional = true) =>
     S.asset({ label, assetTypes: ["animation"], optional });
 
+const particleAsset = (label: string, optional = true) =>
+    S.asset({ label, assetTypes: ["particleSystem"], optional });
+
 const propAsset = (label: string, optional = true) =>
     S.asset({ label, assetTypes: ["prop"], optional });
 
@@ -1280,6 +1283,19 @@ export const JokerCardTrait = J.defineTrait(
         description: "Stuns Rook for 10 seconds",
         icon: "🃏",
         color: "#00ff73",
+    },
+);
+
+export const ParticleEmissionTrait = J.defineTrait(
+    "particleEmitter",
+    S.object({
+        asset: particleAsset("Particle Asset", false)
+    }),
+    {
+        name: "Particle Emitter",
+        description: "Emits particles in a certain area",
+        icon: "✨",
+        color: "#008cff",
     },
 );
 
