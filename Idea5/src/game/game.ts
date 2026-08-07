@@ -10,7 +10,6 @@ import { command } from "./reset";
 let healthUI: HTMLDivElement | undefined;
 let abilityUI: HTMLDivElement | undefined;
 let statUI: HTMLDivElement | undefined;
-let beaconUI: HTMLDivElement | undefined;
 let healthCounter: HTMLDivElement | undefined;
 let currentAbility: HTMLDivElement | undefined;
 let speedCounter: HTMLDivElement | undefined;
@@ -200,19 +199,18 @@ function particleEmission() {
 
 export function HUD() {
     const plr = J.getLocalPlayer();
-        //Beacons HUD Panel
-        beaconUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-top")}`);
-        hudkit.createText(beaconUI, "jt-label", "Beacons Active");
-        activeBeaconCounter = hudkit.createText(beaconUI, "jt-value", "0");
+    // Device Identifier
         //Stats HUD Panel
         statUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle")}`);
         hudkit.createText(statUI, "jt-label", "Stats");
+        hudkit.createText(statUI, "jt-label", "Beacons Active");
+        activeBeaconCounter = hudkit.createText(statUI, "jt-value", "0");
         hudkit.createText(statUI, "jt-label", "Movement Speed");
         speedCounter = hudkit.createText(statUI, "jt-value", `NULL`);
         hudkit.createText(statUI, "jt-label", "Reload Speed");
         cooldownCounter = hudkit.createText(statUI, "jt-value", `NULL`);
         //Health HUD Panel
-        healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("left-middle-bottom")}`);
+        healthUI = hudkit.createHUDPanel(`jt-panel ${hudkit.positionClass("top-middle")}`);
         hudkit.createText(healthUI, "jt-label", "Health")
         healthCounter = hudkit.createText(healthUI, "jt-value", "NULL");
         //Ability HUD Panel
@@ -221,7 +219,7 @@ export function HUD() {
         currentAbility = hudkit.createText(abilityUI, "jt-value", "None");
         const abilityBtn = document.createElement("button");
         abilityBtn.textContent = "⚡";
-        abilityBtn.style.cssText = "position:absolute;bottom:90px;right:16px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityBtn.style.cssText = "position:absolute;bottom:90px;right:10px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FF7600;pointer-events:auto;";
         abilityBtn.addEventListener("pointerdown", () => {
             J.net.send(commands.PlayerAbilitySwitchCommand, { player: plr });
             updateAbilityUI(plr, currentAbility);
@@ -229,7 +227,7 @@ export function HUD() {
         J.uiElement?.appendChild(abilityBtn);
         const abilityDisableBtn = document.createElement("button");
         abilityDisableBtn.textContent = "❌";
-        abilityDisableBtn.style.cssText = "position:absolute;bottom:60px;right:64px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FFD700;pointer-events:auto;";
+        abilityDisableBtn.style.cssText = "position:absolute;bottom:50px;right:70px;width:56px;height:56px;font-size:24px;border-radius:50%;border:3px solid #000;background:#FF7600;pointer-events:auto;";
         abilityDisableBtn.addEventListener("pointerdown", () => {
             resetAbilityUI(currentAbility);
             J.net.send(commands.PlayerAbilityEndCommand, { player: plr });

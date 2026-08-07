@@ -155,7 +155,7 @@ function injectStyles() {
     inset: 0;
     pointer-events: none;
     z-index: 1000;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Electrolize, Orbitron;
     color: white;
 }
 .jt-panel {
@@ -164,8 +164,8 @@ function injectStyles() {
     max-width: min(320px, calc(100vw - 32px));
     padding: 10px 12px;
     border-radius: 8px;
-    background: rgba(14, 18, 26, 0.78);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(0, 36, 108, 0.78);
+    border: 1px solid rgba(0, 21, 255, 0.78);
 }
 .jt-pos-left-middle { top: 40%; left: 18px; transform: translateY(-50%); }
 .jt-pos-left-middle-top { top: 20%; left: 18px; transform: translateY(-50%); }
@@ -174,15 +174,15 @@ function injectStyles() {
 .jt-pos-middle { top: 50%; left: 50%; transform: translateX(-50%); }
 .jt-pos-bottom-middle { bottom: 18px; left: 50%; transform: translateX(-50%); }
 .jt-label {
-    color: rgba(255, 255, 255, 0.72);
+    color: rgb(255, 255, 255);
     font-size: 12px;
     line-height: 16px;
 }
 .jt-value {
     margin-top: 2px;
-    font-size: 24px;
+    font-size: 16px;
     line-height: 30px;
-    font-weight: 800;
+    font-weight: 700;
 }
 .jt-timer {
     top: 18px;
