@@ -324,8 +324,8 @@ export function useCard(type: string, cooldown: number, plr: J.EntityId) {
                         "enabled": true,
                         "velocity": [
                         10,
-                        10,
-                        10
+                        -20,
+                        0
                         ],
                         "additive": false,
                         "predictable": true
