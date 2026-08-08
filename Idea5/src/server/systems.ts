@@ -954,9 +954,11 @@ function tickProjectileSpawners(time: number) {
             continue;
         }
         if (time < nextAt) continue;
+        const enemyTrait = J.getTrait(entityId, EnemyTrait);
+        const isRook = enemyTrait?.type === "Rook";
         let position: J.Vec3
         let direction: J.Vec3;
-        if (J.getTrait(entityId, PlayerTrait) || J.getTrait(entityId, EnemyTrait).type == "Rook") {
+        if (J.getTrait(entityId, PlayerTrait) || isRook) {
            position = addVec3(J.getEntityPosition(entityId), ([0,1.5,0] as J.Vec3));
         } else {
             position = J.getEntityPosition(entityId);
@@ -966,7 +968,7 @@ function tickProjectileSpawners(time: number) {
 
         const lookAt = J.getCharacterViewRay(entityId).direction;
         const vel = trait.direction
-        if (J.getTrait(entityId, PlayerTrait) || J.getTrait(entityId, EnemyTrait).type == "Rook") {
+        if (J.getTrait(entityId, PlayerTrait) || isRook) {
             direction = normalizeVec3(lookAt);
         } else {
             direction = normalizeVec3(vel);
